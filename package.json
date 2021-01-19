@@ -1,0 +1,15 @@
+{
+  "name": "ux-react-crashcourse",
+  "version": "1.0.0",
+  "description": "React Crashcourse Slides for UX Forum",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "mdx-deck src/deck.mdx",
+    "build": "mdx-deck build src/deck.mdx"
+  },
+  "dependencies": {
+    "lodash": "^4.17.20",
+    "mdx-deck": "^4.1.1"
+  }
+}

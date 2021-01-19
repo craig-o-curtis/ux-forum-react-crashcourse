@@ -1,0 +1,10 @@
+.Grid {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.GridItem {
+  background: dodgerblue;
+  padding: 1rem;
+}

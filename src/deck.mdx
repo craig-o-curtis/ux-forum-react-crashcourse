@@ -1,0 +1,92 @@
+import { Head, Header, Footer, Steps, Notes } from "mdx-deck";
+import { themes } from "mdx-deck";
+export const theme = {
+  ...myTheme,
+  ...themes.prism,
+};
+
+import MainContent from "./components/MainContent";
+import Grid from "./components/Grid";
+import myTheme from "./theme";
+import "./styles/index.css";
+
+<Head>
+  <title>React CrashCourse</title>
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@jxnblk" />
+  <meta name="twitter:title" content="My Presentation" />
+  <meta name="twitter:description" content="A really great presentation" />
+  <meta name="twitter:image" content="https://example.com/card.png" />
+</Head>
+<Header className="Header">React CrashCourse</Header>
+<Footer className="Footer">UX Forum (March 2021)- Craig Curtis</Footer>
+
+# React CrashCourse
+
+<MainContent>
+<Grid
+  items={[
+    { label: "Classes", slide: 2 },
+    { label: "Redux", slide: 3 },
+    { label: "Gotchas", slide: 3 },
+    { label: "Hooks", slide: 4 },
+    { label: "Context", slide: 5 },
+    { label: "Activity", slide: 6 },
+  ]}
+/>
+
+<Steps>
+
+- One
+- Two
+- Three
+- Four
+
+</Steps>
+
+</MainContent>
+
+<Notes>
+
+- Only visible to me?
+- Only visible to me!
+
+</Notes>
+
+---
+
+# Slide 2
+
+<MainContent>
+  <p>hello</p>
+</MainContent>
+
+<Notes>
+
+- Only visible to me?
+- Only visible to me!
+
+</Notes>
+
+---
+
+# Slide 3
+
+<MainContent>
+
+```jsx
+const App = () => {
+  return <div></div>;
+};
+
+export default App;
+```
+
+</MainContent>
+
+<Notes>
+
+- Only visible to me?
+- Only visible to me!
+
+</Notes>
