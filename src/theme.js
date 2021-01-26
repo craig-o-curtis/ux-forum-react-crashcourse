@@ -1,4 +1,3 @@
-import { reduce } from "lodash";
 import colors from "./styles/colors";
 
 export default {
@@ -32,7 +31,7 @@ export default {
     Header: {
       textAlign: "left",
       color: colors.xiketic,
-      backgroundColor: colors.sandyBrown,
+      backgroundColor: colors.africanViolet,
       padding: "0.5rem",
       fontSize: "1.25rem",
     },
@@ -46,6 +45,12 @@ export default {
       display: "flex",
       flexDirection: "column",
       justifyContent: "flex-start",
+    },
+    pre: {
+      backgroundColor: "black",
+    },
+    code: {
+      backgroundColor: "black",
     },
   },
 };

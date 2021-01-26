@@ -1,0 +1,23 @@
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.box-badass {
+  background-color: var(--badass);
+  color: var(--purple-navy);
+}
+.box-lightCoral {
+  background-color: var(--light-coral);
+  color: var(--purple-navy);
+}
+.box-sandyBrown {
+  background-color: var(--sandy-brown);
+  color: var(--purple-navy);
+}
+.box-uranianBlue {
+  background-color: var(--uranian-blue);
+  color: var(--purple-navy);
+}

@@ -1,2 +1,10 @@
-@import "./colors.css";
-@import "./overrides.css";
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+@import "./_colors.css";
+@import "./_overrides.css";
+@import "./_animations.css";
+@import "./_margins-padding.css";
+@import "./_text.css";
+@import "./_box-color.css";

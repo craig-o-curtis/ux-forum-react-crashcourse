@@ -26,7 +26,7 @@
     "activityBarBadge.background": "#437a05",
     "activityBarBadge.foreground": "#e7e7e7",
     "titleBar.activeBackground": "#2e0219",
-    "titleBar.inactiveBackground": "#4a001f", // inactive
+    "titleBar.inactiveBackground": "#2e021999",
     "titleBar.activeForeground": "#e7e7e7",
     "titleBar.inactiveForeground": "#e7e7e799",
     "statusBar.background": "#2e0219",

@@ -1,14 +1,32 @@
-import { Head, Header, Footer, Steps, Notes } from "mdx-deck";
+import {
+  Head,
+  Header,
+  Footer,
+  Steps,
+  Notes,
+  // Layouts
+  Default,
+  Invert,
+  Split,
+  SplitRight,
+  Horizontal,
+  FullScreenCode,
+} from "mdx-deck";
 import { themes } from "mdx-deck";
 export const theme = {
-  ...myTheme,
   ...themes.prism,
+  ...myTheme,
 };
+import "tailwindcss/tailwind.css";
+import "./styles/index.css";
 
 import MainContent from "./components/MainContent";
 import Grid from "./components/Grid";
+import BasicGrid from "./components/BasicGrid";
+import GridItem from "./components/GridItem";
+import CodeSandboxCharts from "./components/CodeSandboxCharts";
 import myTheme from "./theme";
-import "./styles/index.css";
+import colors, { colorMap } from "./styles/colors";
 
 <Head>
   <title>React CrashCourse</title>
@@ -21,58 +39,220 @@ import "./styles/index.css";
 <Header className="Header">React CrashCourse</Header>
 <Footer className="Footer">UX Forum (March 2021)- Craig Curtis</Footer>
 
+<!-- PAGE 1 - intro-->
+
 # React CrashCourse
 
 <MainContent>
-<Grid
-  items={[
-    { label: "Classes", slide: 2 },
-    { label: "Redux", slide: 3 },
-    { label: "Gotchas", slide: 3 },
-    { label: "Hooks", slide: 4 },
-    { label: "Context", slide: 5 },
-    { label: "Activity", slide: 6 },
-  ]}
-/>
-
-<Steps>
-
-- One
-- Two
-- Three
-- Four
-
-</Steps>
-
+  <BasicGrid gridAutoFlow="column">
+    <Steps>
+      <div className="box box-badass p-2 text-center">
+        <span>Classes</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>Hooks</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>Redux</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>Context</span>
+      </div>
+      <div className="box box-sandyBrown p-2 text-center">
+        <span>Gotchas, Q&A</span>
+      </div>
+      <div className="box box-sandyBrown p-2 text-center">
+        <span>Activity</span>
+      </div>
+    </Steps>
+  </BasicGrid>
 </MainContent>
 
 <Notes>
 
-- Only visible to me?
-- Only visible to me!
+- React CrashCourse
+- Go for the basics of React
+- Not enough if just do one tutorial
+- Need Classes for legacy projects and 3rd party plugins
+- Understand Hooks for modern React
+- Understand Redux for legacy, and as a state option
+- Learn Context as a simpler Redux alternative - old and new
+- Common Gotchas
 
 </Notes>
 
 ---
 
-# Slide 2
+<!-- PAGE 2 - React Components example with React + D3-->
 
-<MainContent>
-  <p>hello</p>
-</MainContent>
+# Components Example: React + D3
+
+<CodeSandboxCharts />
 
 <Notes>
 
-- Only visible to me?
-- Only visible to me!
+- Made with Codesandbox - set up with Create React App
+- Everything is a component
+- New syntax - HTML in JS, possibly CSS in JS
+- Entry point - public.html
+- Entry point - index.js (bottom), usually App.js too
+- .js, .jsx, .tsx
+- Holy Grail layout - prevent header, sidebar flashing
 
 </Notes>
 
 ---
 
-# Slide 3
+<!-- Page 3 - Class-based React -->
+
+# Class-based React
 
 <MainContent>
+  <BasicGrid gridAutoFlow="row">
+    <Steps>
+      <div className="box box-badass p-2 text-center">
+        <span>JSX</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>Props</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>State</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>Lifecycle Hooks</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>refs</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>HOCs</span>
+      </div>
+    </Steps>
+  </BasicGrid>
+</MainContent>
+
+---
+
+<!-- Page - React Hooks -->
+
+# React Hooks
+
+<MainContent>
+  <BasicGrid gridAutoFlow="row">
+    <Steps>
+      <div className="box box-badass p-2 text-center">
+        <span>Functional components</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>useState</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>useEffect</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>useRef</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>useMyHook</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>Mini Redux - useContext, useReducer</span>
+      </div>
+    </Steps>
+  </BasicGrid>
+</MainContent>
+
+---
+
+<!-- Page - Redux -->
+
+# Redux
+
+<MainContent maxWidth={"100%"}>
+  <BasicGrid gridAutoFlow="row">
+    <Steps>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>connect()</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>mapStateToProps</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>mapDispatchToProps</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>Actions</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>Thunks</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>Redux Dev Tools</span>
+      </div>
+    </Steps>
+  </BasicGrid>
+</MainContent>
+
+---
+
+# Context - Mini Redux
+
+<MainContent>
+  <BasicGrid gridAutoFlow="row">
+    <Steps>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>Class Context</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>Hooks Context</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>Mini Redux Context</span>
+      </div>
+    </Steps>
+  </BasicGrid>
+</MainContent>
+
+---
+
+# Gotchas, Q&A
+
+<MainContent>
+  <BasicGrid gridAutoFlow="row">
+    <Steps>
+      <div className="box box-sandyBrown p-2 text-center">
+        <span>.map, key</span>
+      </div>
+      <div className="box box-sandyBrown p-2 text-center">
+        <span>htmlFor</span>
+      </div>
+      <div className="box box-sandyBrown p-2 text-center">
+        <span>props drilling</span>
+      </div>
+      <div className="box box-sandyBrown p-2 text-center">
+        <span>Mini Redux Context</span>
+      </div>
+    </Steps>
+  </BasicGrid>
+</MainContent>
+
+---
+
+# Activity
+
+Gather.town
+
+<a href="https://gather.town/" target="_blank">
+  Gather.town
+</a>
+
+---
+
+# Slide Code Example
+
+<MainContent maxWidth={`100%`}>
+<Split>
 
 ```jsx
 const App = () => {
@@ -82,11 +262,29 @@ const App = () => {
 export default App;
 ```
 
+### Hi
+
+</Split>
 </MainContent>
 
 <Notes>
 
-- Only visible to me?
-- Only visible to me!
+- Slide 3 notes
 
 </Notes>
+
+---
+
+# Slide 4
+
+<FullScreenCode>
+
+```jsx
+const App = () => {
+  return <div></div>;
+};
+
+export default App;
+```
+
+</FullScreenCode>
