@@ -20,10 +20,21 @@ export const theme = {
 import "tailwindcss/tailwind.css";
 import "./styles/index.css";
 
+import { CodeSurfer, CodeSurferColumns, Step as CodeStep } from "code-surfer";
+import {
+  nightOwl,
+  duotoneDark,
+  oceanicNext,
+  shadsOfPurple,
+  vsDark,
+} from "@code-surfer/themes";
+
 import MainContent from "./components/MainContent";
 import Grid from "./components/Grid";
 import BasicGrid from "./components/BasicGrid";
 import GridItem from "./components/GridItem";
+import Bullets from "./components/Bullets";
+import IframeLoader from "./components/IframeLoader";
 import CodeSandboxCharts from "./components/CodeSandboxCharts";
 import myTheme from "./theme";
 import colors, { colorMap } from "./styles/colors";
@@ -111,6 +122,9 @@ import colors, { colorMap } from "./styles/colors";
   <BasicGrid gridAutoFlow="row">
     <Steps>
       <div className="box box-badass p-2 text-center">
+        <span>Class structure</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
         <span>JSX</span>
       </div>
       <div className="box box-badass p-2 text-center">
@@ -128,9 +142,456 @@ import colors, { colorMap } from "./styles/colors";
       <div className="box box-badass p-2 text-center">
         <span>HOCs</span>
       </div>
+      <div className="box box-badass p-2 text-center">
+        <span>Dumb components</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>PropTypes, TypeScript</span>
+      </div>
     </Steps>
   </BasicGrid>
 </MainContent>
+
+---
+
+# Why Classes?
+
+<MainContent>
+  <BasicGrid columns={1}>
+    <GridItem>Legacy Projects</GridItem>
+    <GridItem>3rd Party Plugins</GridItem>
+    <GridItem>Still Supported</GridItem>
+  </BasicGrid>
+</MainContent>
+
+---
+
+# React Class Structure
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers title="./src/App.js"
+import React, { Component } from "react";
+```
+
+- Import React, Component
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/App.js"
+import React, { Component } from "react";
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+}
+
+export default App;
+```
+
+- Import React, Component
+- Create class, add constructor
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/App.js"
+import React, { Component } from "react";
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <>
+          <h1>My App</h1>
+          {/* Comment add more components */}
+        </>
+      </div>
+    );
+  }
+}
+
+export default App;
+```
+
+- Import React, Component
+- Create class, add constructor
+- render the JSX (notice syntax)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/App.js"
+import React, { Component } from "react";
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <>
+          <h1>My App</h1>
+          {/* Comment add more components */}
+        </>
+      </div>
+    );
+  }
+}
+
+export default App;
+```
+
+- Import React, Component
+- Create class, add constructor
+- render the JSX (notice syntax)
+- This is setup in CRA, let's look at entry point
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+---
+
+<!-- Page - Classes Entry Point -->
+
+# React Entry Point
+
+<IframeLoader
+  src={`https://codesandbox.io/embed/relaxed-chatelet-nnxgj?autoresize=1&codemirror=1&fontsize=14&hidenavigation=1&theme=dark`}
+  title={`Basic CRA Template`}
+/>
+
+- Notice App.js, slightly different syntax
+- Dive into ./src/index.js, connecting to the DOM
+- Dive into ./public/index.html, DOM id entry point at #root
+
+---
+
+# JSX
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers title="./src/Header.jsx" 4,11
+import React, { Component } from "react";
+import styles from "./Header.module.scss";
+
+class Header extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <header className={`header ${styles.Header}`}>
+        <span>My Title</span>
+      </header>
+    );
+  }
+}
+
+export default Header;
+```
+
+- className vs. class
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/Header.jsx" 12:13
+import React, { Component } from "react";
+import styles from "./Header.module.scss";
+
+class Header extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <header className={`header ${styles.Header}`}>
+        <label htmlFor="myInput">Search:</label>
+        <input id="myInput" type="text" />
+      </header>
+    );
+  }
+}
+
+export default Header;
+```
+
+- className vs. class
+- htmlFor vs. for
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/Header.jsx"
+import React, { Component } from "react";
+import styles from "./Header.module.scss";
+
+class Header extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  handleChange(e) {
+    console.log(e.target.value);
+  }
+  clear() {
+    alert("cleared");
+  }
+  handlePlay() {...}
+
+  render() {
+    return (
+      <header className={`header ${styles.Header}`}>
+        <label htmlFor="myInput">Search:</label>
+        <input
+          id="myInput"
+          type="text"
+          onChange={(e) => this.handleChange(e)}
+        />
+        <button onClick={this.clear}>X</button>
+        <video
+          src={`...`}
+          canplay={this.handlePlay}
+        />
+      </header>
+    );
+  }
+}
+
+export default Header;
+```
+
+- className vs. class
+- htmlFor vs. for
+- on events (check MDN events)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/Header.jsx"
+import React, { Component } from "react";
+import styles from "./Header.module.scss";
+
+class Header extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  handleChange(e) {
+    console.log(e.target.value);
+  }
+  clear() {
+    alert("cleared");
+  }
+  handlePlay() {...}
+
+  render() {
+    const results = [
+      {id: 1, name: 'apple'},
+      {id: 2, name: 'banana'},
+    ];
+
+    return (
+      <header className={`header ${styles.Header}`}>
+        <label htmlFor="myInput">Search:</label>
+        <input
+          id="myInput"
+          type="text"
+          onChange={(e) => this.handleChange(e)}
+        />
+        <button onClick={this.clear}>X</button>
+        <video
+          src={`...`}
+          canplay={this.handlePlay}
+        />
+        <ul>
+          {results.map( (result) => {
+            return (
+              <li key={result.id}>{result.name}</li>
+            );
+          })}
+        </ul>
+      </header>
+    );
+  }
+}
+
+export default Header;
+```
+
+- className vs. class
+- htmlFor vs. for
+- on events (check MDN events)
+- mapping lists, keys
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/Header.jsx"
+import React, { Component } from "react";
+import styles from "./Header.module.scss";
+
+class Header extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  handleChange(e) {
+    console.log(e.target.value);
+  }
+  clear() {
+    alert("cleared");
+  }
+  handlePlay() {...}
+
+  render() {
+    const results = [
+      {id: 1, name: 'apple'},
+      {id: 2, name: 'banana'},
+    ];
+
+    return (
+      <header className={`header ${styles.Header}`}>
+        <label htmlFor="myInput">Search:</label>
+        <input
+          id="myInput"
+          type="text"
+          onChange={(e) => this.handleChange(e)}
+        />
+        <button onClick={this.clear}>X</button>
+        <video
+          src={`...`}
+          canplay={this.handlePlay}
+        />
+        <ul>
+          {results.map( result => (
+            <li key={result.id}>{result.name}</li>
+          ))}
+        </ul>
+      </header>
+    );
+  }
+}
+
+export default Header;
+```
+
+- className vs. class
+- htmlFor vs. for
+- on events (check MDN events)
+- mapping lists, keys
+- refined syntax for maps
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/Header.jsx" 24:33
+import React, { Component } from "react";
+import styles from "./Header.module.scss";
+
+class Header extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  handleChange(e) {
+    console.log(e.target.value);
+  }
+  clear() {
+    alert("cleared");
+  }
+  handlePlay() {...}
+
+  render() {
+    const results = [
+      {id: 1, name: 'apple'},
+      {id: 2, name: 'banana'},
+    ];
+
+    return (
+      <>
+        <header className={`header ${styles.Header}`}>
+          ...
+        </header>
+        <video
+          className={`${styles.Video}`}
+          src={`...`}
+          canplay={this.handlePlay}
+        />
+      </>
+    );
+  }
+}
+
+export default Header;
+```
+
+- className vs. class
+- htmlFor vs. for
+- on events (check MDN events)
+- mapping lists, keys
+- refined syntax for maps
+- fragments - must be 1 parent wrapper element
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+---
+
+# Class Props
+
+---
+
+# Class State
+
+---
+
+# Class Lifecycle Hooks
+
+---
+
+# Class refs
+
+---
+
+# Class HOCs - Higher Order Components
+
+---
+
+# Class Dumb Components
+
+---
+
+# Class PropTypes
+
+---
+
+# Class TypeScript
 
 ---
 
@@ -162,6 +623,19 @@ import colors, { colorMap } from "./styles/colors";
     </Steps>
   </BasicGrid>
 </MainContent>
+
+---
+
+# React Hooks Example
+
+<IframeLoader
+  src={`https://codesandbox.io/embed/framer-motion-2-animating-shared-layouts-1cpd0?fontsize=14&hidenavigation=1&theme=dark`}
+  title={`Hooks example`}
+/>
+
+- useState, destructuring value and setter
+- define functions before return
+- !passingValue ? passInFn : (val) => myFn(val)
 
 ---
 
@@ -216,6 +690,15 @@ import colors, { colorMap } from "./styles/colors";
 
 ---
 
+# Class Context Example
+
+<IframeLoader
+  src={"https://d6jtdo9jhz4ae.cloudfront.net/"}
+  title={"CCC Taft Guided Pathways"}
+/>
+
+---
+
 # Gotchas, Q&A
 
 <MainContent>
@@ -239,13 +722,43 @@ import colors, { colorMap } from "./styles/colors";
 
 ---
 
-# Activity
+# Activity - gather.town
 
-Gather.town
+<Split>
 
-<a href="https://gather.town/" target="_blank">
-  Gather.town
-</a>
+<div>
+  <video autoplay controls style={{ width: "100%", height: "100%" }}>
+    <source
+      src={`https://gather.town/images/site/landing_demo.mp4`}
+      type="video/mp4"
+    />
+  </video>
+</div>
+
+<div>
+  <p>
+    Room:{" "}
+    <a
+      href="https://gather.town/app/IxOEh5iBhXwxdTWg/ux-forum-react"
+      target="_blank"
+    >
+      Gather.town ux-forum-react
+    </a>
+  </p>
+  <p>Password: uxforumreact</p>
+</div>
+
+</Split>
+
+<Notes>
+
+- Class, Hooks, Redux, Context
+- Volunteers, find a space
+- 2 minutes per Room
+- Last 2 minutes, free-for-all, see what happens
+- End - meet in Conference Room
+
+</Notes>
 
 ---
 
@@ -272,19 +785,3 @@ export default App;
 - Slide 3 notes
 
 </Notes>
-
----
-
-# Slide 4
-
-<FullScreenCode>
-
-```jsx
-const App = () => {
-  return <div></div>;
-};
-
-export default App;
-```
-
-</FullScreenCode>
