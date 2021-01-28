@@ -559,11 +559,270 @@ export default Header;
 
 </CodeStep>
 
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+import isEmpty from "lodash/isEmpty";
+import styles from "./Header.module.scss";
+
+class Header extends Component {
+  render() {
+    const { results, hasError } = this.props;
+
+    return (
+      <>
+        {
+          isEmpty(results) ? (
+            <header>...</header>
+          ) : (
+            <video>...</video>
+          );
+        }
+        {hasError ? (<Alert type="danger" />) : null}
+        {hasSuccess && (<Alert type="success" />")}
+      </>
+    );
+  }
+}
+
+export default Header;
+```
+
+- className vs. class
+- htmlFor vs. for
+- on events (check MDN events)
+- mapping lists, keys
+- refined syntax for maps
+- fragments - must be 1 parent wrapper element
+- ? () : (), &&, null
+
+</CodeStep>
+
 </CodeSurferColumns>
 
 ---
 
+# Props
+
+## What are props?
+
+- Data Down - Data into components
+- Events Up - Functions notifying parent components
+- Dangers of Prop drilling
+- Will tie to Life Cycles and Hooks
+
+** This is a clearfix slide **
+
+---
+
 # Class Props
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers 9:12,16,22:37
+import React, { Component } from "react";
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const results = [
+      { id: 1, name: "apple" },
+      { id: 2, name: "banana" },
+    ];
+
+    return (
+      <div>
+        <Header title="My App" results={results} />
+      </div>
+    );
+  }
+}
+
+class Header extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <>
+        <header>{this.props.title}</header>
+        {this.props.results.map((result) => (
+          <p>{result.name}</p>
+        ))}
+      </>
+    );
+  }
+}
+
+export default App;
+```
+
+- data down (title, results)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const results = [
+      { id: 1, name: "apple" },
+      { id: 2, name: "banana" },
+    ];
+
+    return (
+      <div>
+        <Header title="My App" results={results} />
+      </div>
+    );
+  }
+}
+
+class Header extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { title, results } = this.props;
+
+    return (
+      <>
+        <header>{title}</header>
+        {results.map((result) => (
+          <p>{result.name}</p>
+        ))}
+      </>
+    );
+  }
+}
+
+export default App;
+```
+
+- data down (title, results)
+- refined destructuring
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class App extends Component {
+  handleItemClicked(id) {...}
+  handleToggleMenu() {...}
+
+  render() {
+    ...
+    return (
+      <div>
+        <Header
+          ...
+          onItemClicked={(id) => this.handleItemClicked(id)}
+          onToggleMenu={() => this.handleToggleMenu()}
+        />
+      </div>
+    );
+  }
+}
+
+class Header extends Component {
+  ...
+  render() {
+    const {
+      ...
+      onItemClicked,
+      onToggleMenu
+    } = this.props;
+
+    return (
+      <>
+        <header>
+          ...
+          <button onClick={() => onToggleMenu()}>Menu</button>
+        </header>
+        {results.map((result) => (
+          <p onClick={() => onItemClicked(result.id)}>{result.name}</p>
+        ))}
+      </>
+    );
+  }
+}
+
+export default App;
+```
+
+- data down (title, results)
+- refined destructuring
+- events up, (optional params)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="Prop Drilling"
+  {/* App */}
+  ...
+  render() {
+    return (
+      <div className="App">
+        <HeaderButton isMenuOpen{false} />
+      </div>
+    );
+  }
+  ...
+  {/* Header */}
+  ...
+  render() {
+    return (
+      <header className="Header">
+        <HeaderButton isMenuOpen{this.props.isMenuOpen} />
+      </header>
+    );
+  }
+  {/* Header Button */}
+  ...
+  render() {
+    return (
+      <button className="HeaderButton">
+        <HeaderButtonIcon isMenuOpen{this.props.isMenuOpen} />
+      </button>
+    );
+  }
+  {/* Header Button Icon */}
+  render() {
+    return (
+      <span className="HeaderButtonIcon">
+        {this.props.isMenuOpen ? 'Open' : 'Closed'}
+      </span>
+    );
+  }
+```
+
+- data down (title, results)
+- refined destructuring
+- events up, (optional params)
+- Dangers of Prop Drilling (solved with Redux or Context)
+
+</CodeStep>
+
+</CodeSurferColumns>
 
 ---
 
@@ -727,7 +986,7 @@ export default Header;
 <Split>
 
 <div>
-  <video autoplay controls style={{ width: "100%", height: "100%" }}>
+  <video autoPlay controls style={{ width: "100%", height: "100%" }}>
     <source
       src={`https://gather.town/images/site/landing_demo.mp4`}
       type="video/mp4"
@@ -762,26 +1021,10 @@ export default Header;
 
 ---
 
-# Slide Code Example
+# Fin
 
-<MainContent maxWidth={`100%`}>
-<Split>
-
-```jsx
-const App = () => {
-  return <div></div>;
-};
-
-export default App;
-```
-
-### Hi
-
-</Split>
+<MainContent>
+  <BasicGrid columns={1}>
+    <GridItem className="box box-badass p-2 text-center">Questions?</GridItem>
+  </BasicGrid>
 </MainContent>
-
-<Notes>
-
-- Slide 3 notes
-
-</Notes>
