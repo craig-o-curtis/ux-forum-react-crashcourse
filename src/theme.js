@@ -29,6 +29,7 @@ export default {
     h4: { fontWeight: 100 },
     h5: { fontWeight: 100 },
     h6: { fontWeight: 100 },
+    li: { textAlign: "left", lineHeight: 1.752 },
     blockquote: {
       fontStyle: "italic",
     },

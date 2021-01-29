@@ -1000,6 +1000,14 @@ class App extends Component {
 
 ---
 
+# componentDidMount
+
+- API Calls
+- Animations
+- Listeners
+
+---
+
 # Class Lifecycle - componentDidMount
 
 <CodeSurferColumns themes={[nightOwl,nightOwl]}>
@@ -1130,7 +1138,266 @@ class BookList extends Component {
 
 </CodeStep>
 
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from 'react';
+import isEmpty from 'lodash/isEmpty';
+import styles from './BookList.module.scss';
+
+class BookList extends Component {
+  state = {
+    books: []; // [ {id: number, title: string} ]
+    loadState: null; // 'loading', 'success', 'error'
+  }
+
+  async componentDidMount() {
+    cosnt { bookListId } = this.props;
+
+    this.setState({loadState: 'loading'});
+
+    try {
+      const booksRes = await fetch(`https://api.com/${bookListId}`);
+      const books = await booksRes.json();
+      this.setState({ books, loadState: 'success'});
+    } catch(error) {
+      console.error(error);
+      this.setState({ loadState: 'error' });
+    }
+
+  }
+
+  render() {
+    const { books, loadState } = this.state;
+    return (
+      <>
+        {switch(true) {
+          case loadState === 'loading':
+            return (<div className={styles.Loading} />);
+          case loadState === 'error':
+            return (<div className={styles.Error}>Error</div>);
+          case loadState === 'success' && !isEmpty(books):
+            return (
+              <div className={styles.BookList}>
+                {books.map( b => (
+                  <div className={styles.Book}>...</div>
+                ))}
+              </div>
+            );
+          case loadState === 'success' && isEmpty(books):
+          default:
+            return (<div className={styles.Placeholder} />)
+        }}
+      </>
+    );
+  }
+}
+```
+
+<div>
+
+## API Calls, Animations
+
+- Set up basic component
+- Add componentDidMount method
+- Refine with async await
+- Add the JSX
+
+</div>
+
+</CodeStep>
+
 </CodeSurferColumns>
+
+---
+
+# componentDidUpdate
+
+<Horizontal>
+
+- watch props changes
+- watch state changes
+- not called on initial render
+
+</Horizontal>
+
+---
+
+# Class Lifecycle - componentDidUpdate
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class BookList extends Component {
+  componentDidMount() { {/* API call */} };
+  render() { return ...};
+}
+
+```
+
+- Assume isAuthenticated is a prop passed in...
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class BookList extends Component {
+  componentDidMount() { {/* API call */} };
+
+  componentDidUpdate(prevProps, prevState) {
+    const { isAuthenticated } = this.props;
+    const wasAuthenticated = prevProps.isAuthenticated;
+
+    if (wasAuthenticated && !isAuthenticated) {
+      this.removeData();
+    }
+    if (!wasAuthenticated && isAuthenticated) {
+      this.loadData();
+    }
+  }
+
+  render() { return ...};
+}
+
+```
+
+- Assume isAuthenticated is a prop passed in... want to hide books if false
+- use compoonentDidUpdate to watch for props or state changes
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+<Notes>
+
+- test notes
+
+</Notes>
+
+---
+
+# componentWillUnmount
+
+<Horizontal>
+
+- Cleanup functions
+- Clearing intervals, timeouts
+- Removing event listeners
+
+</Horizontal>
+
+---
+
+# Class Lifecycle - componentWillUnmount
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+class Chart extends Component {
+  componentDidMount() {
+    this.loadChart();
+  }
+  componentDIdUpdate() {
+    this.updateChart();
+  }
+}
+```
+
+- Used for cleanup functions
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+class Chart extends Component {
+  componentDidMount() {
+    this.loadChart();
+  }
+  componentDIdUpdate() {
+    this.updateChart();
+  }
+  componentWillUnmount() {
+    this.destroyChart();
+  }
+}
+```
+
+- Used for cleanup functions
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+class Chart extends Component {
+  private _interval: number = null;
+
+  componentDidMount() { //
+    this._interval = window.setInterval(() => {
+      this.pingServer();
+    }, 60000);
+  }
+
+  componentWillUnmount() { //
+    window.clearInterval(this._interval);
+  }
+}
+```
+
+- Used for cleanup functions
+- and clearing intervals, timeouts
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+class WindowEventWrapper extends Component {
+  componentDidMount() {
+    window.addEventListener("blur", this.onWindowBlurred);
+    window.addEventListener("focus", this.onWindowFocused);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("blur", this.onWindowBlurred);
+    window.removeEventListener("focus", this.onWindowFocused);
+  }
+}
+```
+
+- Used for cleanup functions
+- and clearing intervals, timeouts
+- and event listeners
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+<Notes>
+
+- test notes
+
+</Notes>
+
+---
+
+# refs
+
+<Horizontal>
+
+- For DOM manipulation
+
+</Horizontal>
 
 ---
 
@@ -1152,6 +1419,18 @@ test;
 
 ---
 
+# HOCs - Higher Order Components
+
+<Horizontal>
+
+- Hoisting up state to parent components
+- Common in Redux
+- Child compnents are Functional comopnents, not Classes
+
+</Horizontal>
+
+---
+
 # Class HOCs - Higher Order Components
 
 <CodeSurferColumns themes={[nightOwl,nightOwl]}>
@@ -1167,6 +1446,16 @@ test;
 </CodeStep>
 
 </CodeSurferColumns>
+
+---
+
+# Dumb Components
+
+<Horizontal>
+
+-
+
+</Horizontal>
 
 ---
 
@@ -1254,6 +1543,9 @@ test;
       </div>
       <div className="box box-badass p-2 text-center">
         <span>Mini Redux - useContext, useReducer</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>3rd Party Hooks</span>
       </div>
     </Steps>
   </BasicGrid>
