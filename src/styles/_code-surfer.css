@@ -1,3 +1,17 @@
 .cs-container {
   text-align: left;
 }
+
+.cs-col-layout {
+  top: -134px;
+  z-index: 0;
+}
+
+h4.cs-title {
+  top: 130px;
+}
+
+code.cs-scaled-content {
+  position: relative;
+  top: 65px;
+}

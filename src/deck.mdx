@@ -599,6 +599,32 @@ export default Header;
 
 </CodeStep>
 
+<CodeStep>
+
+```js showNumbers
+...
+const newObject = {
+  ...oldObject,
+  { active: true }
+};
+
+const newArray = [
+  ...oldArray,
+  { id: 100, 'zucchini'}
+];
+```
+
+- className vs. class
+- htmlFor vs. for
+- on events (check MDN events)
+- mapping lists, keys
+- refined syntax for maps
+- fragments - must be 1 parent wrapper element
+- ? () : (), &&, null
+- new objects and arrays with spread syntax ...
+
+</CodeStep>
+
 </CodeSurferColumns>
 
 ---
@@ -828,29 +854,373 @@ export default App;
 
 # Class State
 
+## What is State?
+
+- Stores data for a component
+- For mutated data
+- Retains across renders
+
+---
+
+# Class State Code
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    state = {
+      isMenuOpen: false,
+      results: [],
+    };
+  }
+}
+```
+
+- Set default in costructor
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+class App extends Component {
+  state = {
+    isMenuOpen: false,
+    results: [],
+  };
+}
+```
+
+- Set default in costructor
+- OR no constructor syntax
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+class App extends Component {
+  state = {
+    isMenuOpen: false,
+    results: [],
+  };
+
+  handleToggleMenu() {
+    const { isMenuOpen } = this.state;
+    setState({ isMenuOpen: !isMenuOpen });
+  }
+
+  setResults(results) {
+    setState({ results });
+  }
+}
+```
+
+- Set default in costructor
+- OR no constructor syntax
+- Change values with setState
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+class App extends Component {
+  state = {
+    isMenuOpen: false,
+    results: [],
+  };
+
+  handleToggleMenu() {
+    () => {
+      const { isMenuOpen } = this.state;
+      setState({ isMenuOpen: !isMenuOpen });
+    };
+  }
+
+  setResults(results) {
+    setState((prevState, props) => {
+      // prettier-ignore
+      return {
+        results: prevState.isMenuOpen 
+          ? results 
+          : prevState.results,
+      };
+    });
+  }
+}
+```
+
+- Set default in costructor
+- OR no constructor syntax
+- Change values with setState
+- setState callback (ensure state is changed, since is async)
+
+</CodeStep>
+
+</CodeSurferColumns>
+
 ---
 
 # Class Lifecycle Hooks
+
+<BasicGrid columns={3} rows={1}>
+  <GridItem>
+    <h3>Mounting</h3>
+    <ol>
+      <li>constructor</li>
+      <li>render</li>
+      <li>componentDidMount</li>
+    </ol>
+  </GridItem>
+  <GridItem>
+    <h3>Updating</h3>
+    <ol>
+      <li>render</li>
+      <li>componentDIdUpdate</li>
+    </ol>
+  </GridItem>
+  <GridItem>
+    <h3>Unmounting</h3>
+    <ol>
+      <li>componentWillUnmount</li>
+    </ol>
+  </GridItem>
+</BasicGrid>
+
+<IframeLoader
+  src={`https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/`}
+  title={`React Lifecycle Methods`}
+/>
+
+---
+
+# Class Lifecycle - componentDidMount
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from 'react';
+import isEmpty from 'lodash/isEmpty';
+
+class BookList extends Component {
+  state = {
+    books: []; // [ {id: number, title: string} ]
+    loadState: null; // 'loading', 'success', 'error'
+  }
+
+  render() {
+    const { books, loadState } = this.state;
+    return (
+      <></>
+    );
+  }
+}
+```
+
+<div>
+
+## API Calls, Animations
+
+- Set up basic component
+
+</div>
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from 'react';
+import isEmpty from 'lodash/isEmpty';
+
+class BookList extends Component {
+  state = {
+    books: []; // [ {id: number, title: string} ]
+    loadState: null; // 'loading', 'success', 'error'
+  }
+
+  componentDidMount() {
+    cosnt { bookListId } = this.props;
+
+    this.setState({loadState: 'loading'});
+
+    fetch(`https://api.com/${bookListId}`)
+      .then(res => res.json())
+      .then(data => this.setState({ books: data, loadState: 'success' }))
+      .catch(error => {
+        console.error(error);
+        this.setState({ loadState: 'error' })
+      })
+  }
+
+  render() {
+    const { books, loadState } = this.state;
+    return (
+      <></>
+    );
+  }
+}
+```
+
+<div>
+
+## API Calls, Animations
+
+- Set up basic component
+- Add componentDidMount method
+
+</div>
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from 'react';
+import isEmpty from 'lodash/isEmpty';
+
+class BookList extends Component {
+  state = {
+    books: []; // [ {id: number, title: string} ]
+    loadState: null; // 'loading', 'success', 'error'
+  }
+
+  async componentDidMount() {
+    cosnt { bookListId } = this.props;
+
+    this.setState({loadState: 'loading'});
+
+    try {
+      const booksRes = await fetch(`https://api.com/${bookListId}`);
+      const books = await booksRes.json();
+      this.setState({ books, loadState: 'success'});
+    } catch(error) {
+      console.error(error);
+      this.setState({ loadState: 'error' });
+    }
+
+  }
+
+  render() {
+    const { books, loadState } = this.state;
+    return (
+      <></>
+    );
+  }
+}
+```
+
+<div>
+
+## API Calls, Animations
+
+- Set up basic component
+- Add componentDidMount method
+- Refine with async await
+
+</div>
+
+</CodeStep>
+
+</CodeSurferColumns>
 
 ---
 
 # Class refs
 
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+test;
+```
+
+- Step 1
+
+</CodeStep>
+
+</CodeSurferColumns>
+
 ---
 
 # Class HOCs - Higher Order Components
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+test;
+```
+
+- Step 1
+
+</CodeStep>
+
+</CodeSurferColumns>
 
 ---
 
 # Class Dumb Components
 
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+test;
+```
+
+- Step 1
+
+</CodeStep>
+
+</CodeSurferColumns>
+
 ---
 
 # Class PropTypes
 
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+test;
+```
+
+- Step 1
+
+</CodeStep>
+
+</CodeSurferColumns>
+
 ---
 
 # Class TypeScript
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+test;
+```
+
+- Step 1
+
+</CodeStep>
+
+</CodeSurferColumns>
 
 ---
 
@@ -869,6 +1239,12 @@ export default App;
       </div>
       <div className="box box-badass p-2 text-center">
         <span>useEffect</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>useCallback</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>useMemo</span>
       </div>
       <div className="box box-badass p-2 text-center">
         <span>useRef</span>
