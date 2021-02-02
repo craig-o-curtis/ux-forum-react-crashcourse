@@ -137,13 +137,13 @@ import colors, { colorMap } from "./styles/colors";
         <span>Lifecycle Hooks</span>
       </div>
       <div className="box box-badass p-2 text-center">
-        <span>refs</span>
+        <span>Hoisting State</span>
       </div>
       <div className="box box-badass p-2 text-center">
         <span>HOCs</span>
       </div>
       <div className="box box-badass p-2 text-center">
-        <span>Dumb components</span>
+        <span>refs</span>
       </div>
       <div className="box box-badass p-2 text-center">
         <span>PropTypes, TypeScript</span>
@@ -638,8 +638,6 @@ const newArray = [
 - Dangers of Prop drilling
 - Will tie to Life Cycles and Hooks
 
-** This is a clearfix slide **
-
 ---
 
 # Class Props
@@ -944,14 +942,12 @@ class App extends Component {
   }
 
   setResults(results) {
-    setState((prevState, props) => {
-      // prettier-ignore
-      return {
-        results: prevState.isMenuOpen 
-          ? results 
+    // prettier-ignore
+    setState(() => ({
+      results: prevState.isMenuOpen
+          ? results
           : prevState.results,
-      };
-    });
+    }));
   }
 }
 ```
@@ -1233,7 +1229,10 @@ class BookList extends Component {
 import React, { Component } from "react";
 
 class BookList extends Component {
-  componentDidMount() { {/* API call */} };
+  componentDidMount() {
+    console.log(this.props.isAuthenticated);
+    {/* API call */}
+  };
   render() { return ...};
 }
 
@@ -1383,11 +1382,338 @@ class WindowEventWrapper extends Component {
 
 </CodeSurferColumns>
 
-<Notes>
+---
 
-- test notes
+# Hoisting State + Functional Components
 
-</Notes>
+<Horizontal>
+
+- Hoisting up state to parent components
+- Child components are Functional components, not Classes
+- Function components had no state (prior to React v.16.8)
+
+</Horizontal>
+
+---
+
+# Hoisting State + Functional Components
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+class App extends Component {
+  state = {
+    isDarkMode: false,
+  };
+
+  render() {
+    return (
+      <div>
+        <UserSettings />
+      </div>
+    );
+  }
+}
+```
+
+- Common to have state in App.js for small projects
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+class App extends Component {
+  state = {
+    isDarkMode: false,
+  };
+  handleToggleDarkMode() {
+    const { isDarkMode } = this.state;
+    this.setState({ isDarkMode: !isDarkMode });
+  }
+
+  render() {
+    const { isDarkMode } = this.state;
+    return (
+      <div>
+        <UserSettings
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={this.handleToggleDarkMode}
+        />
+      </div>
+    );
+  }
+}
+
+<!-- prettier-ignore -->
+const UserSettings = ({
+  isDarkMode = false,
+  onToggleDarkMode,
+}) => (
+  <div className={
+    `${styles.UserSettings} ${isDarkMode ? "isDarkMode" : ""}`
+  }>
+    <button onClick={() => onToggleDarkMode()}>...</button>
+  </div>
+);
+```
+
+- Common to have state in App.js for small projects
+- Child components are typically functional components / dumb components (notice syntax)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+class App extends Component {
+  state = {
+    books: null,
+  };
+
+  render() {
+    const { books } = this.state;
+    return (
+      <div>
+        <BookList books={books} />
+      </div>
+    );
+  }
+}
+
+const BookList = ({ books=[] }) => {
+  if (isEmpty(books)) return null;
+  const sortedBooks = books.sort( (a,b) -> b.date - a.date );
+
+  return (
+    <ul>
+      {sortedBooks.map( b => (
+        <li key={b.id}>{b.title} - {b.date}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+- Common to have state in App.js for small projects
+- Child components are typically functional components / dumb components (notice syntax)
+- Logic can be handled before returns
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+---
+
+# HOCs - Higher Order Components
+
+<Horizontal>
+
+- HOC = a function that takes a component and returns a new component
+- React Router withRouter()
+- Redux connect()()
+- React Soundplayer withCustomAudio()
+- Material UI withStyles()
+
+</Horizontal>
+
+---
+
+# HOCs - Higher Order Components
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+import React from "react";
+import { withRouter } from "react-router";
+
+class ShowTheLocation extends React.Component {
+  render() {
+    const { match, location, history } = this.props;
+
+    return (
+      <div>
+        <span>You are now at&#32;</span>
+        <span>{location.pathname}</span>
+      </div>
+    );
+  }
+}
+
+const ShowTheLocationWithRouter = withRouter(ShowTheLocation);
+```
+
+- withRouter in React Router
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import { connect } from "react-redux";
+import isEmpty from 'lodash/isEmpty';
+class MyComponent extends Component {
+  render() {
+    const { isDarkMode, users, onUserClicked } = this.props; // from store
+    return (
+      <div className={`${isDarkMode ? 'dark' : ''}`}>
+        {!isEmpty(users) && (
+          <ul>
+            {users.map( u => (
+              <li
+                key={u.id}
+                onClick={() => onUserClicked(u.id)}
+              >
+                {u.name}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (store) => {
+  isDarkMode: store.isDarkMode,
+  users: store.users,
+};
+
+const mapDispatchToProps = dispatch => ({
+  onUserClicked: (id) => dispatch({ type: 'USER_CLICKED', value: id})
+});
+
+const ConnectedMyComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MyComponent);
+export default ConnectedMyComponent;
+```
+
+- withRouter in React Router
+- connect function in Redux
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+...
+class WrappedComponent extends Component {...}
+
+export default withRouter
+  (connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(WrappedComponent)
+);
+```
+
+- withRouter in React Router
+- connect function in Redux
+- OR both React Router and Redux
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+import {
+  PlayButton,
+  Timer,
+  Progress,
+  VolumeControl,
+} from "react-soundplayer/components";
+import { withCustomAudio } from "react-soundplayer/addons";
+
+interface ICustomAudioPlayerProps {
+  onCanPlayTrack: (time: number) => {};
+  onStartTrack: () => {};
+  onPauseTrack: () => {};
+  onStopTrack: () => {};
+  currentTime: number;
+  duration: number;
+  hasSetStartTime: boolean;
+  isMuted: boolean;
+  playing: boolean;
+  preloadType: string;
+  seeking: boolean;
+  soundCloudAudio: any;
+  streamUrl: string;
+  volume: number;
+  jumpToTime: number;
+}
+
+class CustomAudioPlayer extends Component<ICustomAudioPlayerProps, {}> {
+  render() {
+    return (
+      <div className={`${styles.CustomAudioPlayer}`}>
+        <PlayButton {...this.props} />
+        <Timer {...this.props} />
+        <Progres {...this.props} />
+        <VolumeControl {...this.props} />
+      </div>
+    );
+  }
+}
+
+const CustomAudioPlayer = withCustomAudio(InnerCustomAudioPlayer);
+export default CustomAudioPlayer;
+```
+
+- withRouter in React Router
+- connect function in Redux
+- OR both React Router and Redux
+- react-soundplayer
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+
+const styles = {
+  root: {
+    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    border: 0,
+    borderRadius: 3,
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    color: "white",
+    height: 48,
+    padding: "0 30px",
+  },
+};
+
+function HigherOrderComponent(props) {
+  const { classes } = props;
+  return <Button className={classes.root}>Higher-order component</Button>;
+}
+
+HigherOrderComponent.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(HigherOrderComponent);
+```
+
+- withRouter in React Router
+- connect function in Redux
+- OR both React Router and Redux
+- react-soundplayer
+- material-ui withStyles
+
+</CodeStep>
+
+</CodeSurferColumns>
 
 ---
 
@@ -1395,7 +1721,9 @@ class WindowEventWrapper extends Component {
 
 <Horizontal>
 
-- For DOM manipulation
+- For DOM manipulation - focus/blur, media events
+- For storing values
+- Do not overuse refs
 
 </Horizontal>
 
@@ -1408,10 +1736,172 @@ class WindowEventWrapper extends Component {
 <CodeStep>
 
 ```js showNumbers
-test;
+import React, { Component } from "react";
+
+class CustomTextInput extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div>
+        <input type="text" />
+        <button>
+          Focus the text input
+        </button
+      </div>
+    );
+  }
+}
+
+export default CustomTextInput;
 ```
 
-- Step 1
+- Start with simple component
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class CustomTextInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.textInput = React.createRef();
+    this.focusTextInput = this.focusTextInput.bind(this);
+  }
+
+  focusTextInput() {
+    this.textInput.current.focus();
+  }
+
+  render() {
+    return (
+      <div>
+        <input
+          type="text"
+          ref={this.textInput} />
+        <button
+          onClick={this.focusTextInput}
+        >
+          Focus the text input
+        </button
+      </div>
+    );
+  }
+}
+
+export default CustomTextInput;
+```
+
+- Start with simple component
+- Create ref in constructor, add ref to DOM element
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class CustomTextInput extends Component {
+  _textInput = React.createRef();
+
+  focusTextInput() {
+    this._textInput.current.focus();
+  }
+
+  render() {
+    return (
+      <div>
+        <input type="text" ref={this._textInput} />
+        <button onClick={() => this.focusTextInput()}>
+          Focus the text input
+        </button>
+      </div>
+    );
+  }
+}
+
+export default CustomTextInput;
+```
+
+- Start with simple component
+- Create ref in constructor, add ref to DOM element
+- Refine with constructorless syntax
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class CustomTextInput extends Component {
+  focusTextInput() {
+    this._textInput.current.focus();
+  }
+
+  render() {
+    return (
+      <div>
+        <input type="text" ref={(node) => (this._textInput = node)} />
+        <button onClick={() => this.focusTextInput()}>
+          Focus the text input
+        </button>
+      </div>
+    );
+  }
+}
+
+export default CustomTextInput;
+```
+
+- Start with simple component
+- Create ref in constructor, add ref to DOM element
+- Refine with constructorless syntax
+- Other common syntax for refs - no createRef
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+const Input = ({ inputRef }) => {
+  return <input type="text" ref={inputRef} />;
+};
+
+class App extends Component {
+  state = {
+    value: "",
+  };
+
+  handleSubmit = (event) => {
+    e.preventDefault();
+    this.setState({ value: this._input.value });
+  };
+
+  render() {
+    const { value } = this.state;
+    return (
+      <div>
+        <h3>Value: {value}</h3>
+        <Input inputRef={(node) => (_input = node)} />
+        <button onClick={(e) => this.handleSubmit(e)}>Submit</button>
+      </div>
+    );
+  }
+}
+```
+
+- Start with simple component
+- Create ref in constructor, add ref to DOM element
+- Refine with constructorless syntax
+- Other common syntax for refs - no createRef
+- Passing refs
 
 </CodeStep>
 
@@ -1419,93 +1909,121 @@ test;
 
 ---
 
-# HOCs - Higher Order Components
+# Class PropTypes and TypeScript
 
 <Horizontal>
 
-- Hoisting up state to parent components
-- Common in Redux
-- Child compnents are Functional comopnents, not Classes
+- PropTypes in many 3rd party libs, no tsx
+- TSX as the standard
 
 </Horizontal>
 
 ---
 
-# Class HOCs - Higher Order Components
+# Class PropTypes and TypeScript Example
 
 <CodeSurferColumns themes={[nightOwl,nightOwl]}>
 
 <CodeStep>
 
-```js showNumbers
-test;
+```js showNumbers title="BookList.jsx"
+import React, { Component } from "react";
+
+class BookList extends Component {
+  render() {
+    const { isDarkMode, title, books, icon } = this.props;
+
+    return <div>...</div>;
+  }
+}
+
+export default BookList;
 ```
 
-- Step 1
+- Start with a class
 
 </CodeStep>
 
-</CodeSurferColumns>
-
----
-
-# Dumb Components
-
-<Horizontal>
-
--
-
-</Horizontal>
-
----
-
-# Class Dumb Components
-
-<CodeSurferColumns themes={[nightOwl,nightOwl]}>
-
 <CodeStep>
 
-```js showNumbers
-test;
+```js showNumbers title="BookList.jsx"
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+
+class BookList extends Component {
+  render() {
+    const { isDarkMode, pageTitle, books, icon, onIconClicked } = this.props;
+
+    return <div>...</div>;
+  }
+}
+
+BookList.propTypes = {
+  isDarkMode: PropTypes.bool,
+  pageTitle: PropTypes.string,
+  books: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+      date: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    })
+  ),
+  icon: PropTypes.elementType,
+  onIconClicked: PropTypes.func,
+};
+
+export default BookList;
 ```
 
-- Step 1
+- Start with a class
+- Define shapes of props
 
 </CodeStep>
 
-</CodeSurferColumns>
-
----
-
-# Class PropTypes
-
-<CodeSurferColumns themes={[nightOwl,nightOwl]}>
-
 <CodeStep>
 
-```js showNumbers
-test;
+```js showNumbers title="BookList.tsx"
+import React, { Component, ReactNode } from "react";
+
+interface IBook {
+  title: string;
+  date: string | number;
+}
+
+interface IBookListProps {
+  isDarkMode: boolean;
+  pageTitle: string;
+  books: IBook;
+  icon: ReactNode;
+  onIconClicked: () => void;
+}
+
+interface IBookListState {
+  showAnimation: boolean;
+}
+
+class BookList extends Component<IBookListProps, IBookListState> {
+  state = {
+    showAnimation: false,
+  };
+
+  handleIconClicked(): void {
+    const { showAnimation } = this.state;
+    this.setState(() => ({ showAnimation: !showAnimation }));
+  }
+
+  render() {
+    const { isDarkMode, pageTitle, books, icon, onIconClicked } = this.props;
+
+    return <div>...</div>;
+  }
+}
+
+export default BookList;
 ```
 
-- Step 1
-
-</CodeStep>
-
-</CodeSurferColumns>
-
----
-
-# Class TypeScript
-
-<CodeSurferColumns themes={[nightOwl,nightOwl]}>
-
-<CodeStep>
-
-```js showNumbers
-test;
-```
-
-- Step 1
+- Start with a class
+- Define shapes of props
+- Convert to TypeScript
 
 </CodeStep>
 
