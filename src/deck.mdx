@@ -5,7 +5,7 @@ import {
   Steps,
   Notes,
   // Layouts
-  Default,
+  Layout,
   Invert,
   Split,
   SplitRight,
@@ -13,6 +13,7 @@ import {
   FullScreenCode,
 } from "mdx-deck";
 import { themes } from "mdx-deck";
+import myTheme, { stateTheme, reviewTheme } from "./theme";
 export const theme = {
   ...themes.prism,
   ...myTheme,
@@ -36,7 +37,6 @@ import GridItem from "./components/GridItem";
 import Bullets from "./components/Bullets";
 import IframeLoader from "./components/IframeLoader";
 import CodeSandboxCharts from "./components/CodeSandboxCharts";
-import myTheme from "./theme";
 import colors, { colorMap } from "./styles/colors";
 
 <Head>
@@ -152,6 +152,15 @@ import colors, { colorMap } from "./styles/colors";
   </BasicGrid>
 </MainContent>
 
+<Notes>
+
+- Classes for legacy, make you a stronger React developer
+- Basics of React
+- Main points of Classes
+- Quick dive / snorkeling into TypeScript
+
+</Notes>
+
 ---
 
 # Why Classes?
@@ -161,8 +170,15 @@ import colors, { colorMap } from "./styles/colors";
     <GridItem>Legacy Projects</GridItem>
     <GridItem>3rd Party Plugins</GridItem>
     <GridItem>Still Supported</GridItem>
+    <GridItem>React docs still largely use classes</GridItem>
   </BasicGrid>
 </MainContent>
+
+<Notes>
+
+- (( Compare with Traditional and Simplified Chinese ))
+
+</Notes>
 
 ---
 
@@ -264,6 +280,15 @@ export default App;
 
 </CodeSurferColumns>
 
+<Notes>
+
+- Explain import export destructuring
+- constructor and constructorless (coming later)
+- className vs. class
+- JSX = HTML in render function
+
+</Notes>
+
 ---
 
 <!-- Page - Classes Entry Point -->
@@ -278,6 +303,14 @@ export default App;
 - Notice App.js, slightly different syntax
 - Dive into ./src/index.js, connecting to the DOM
 - Dive into ./public/index.html, DOM id entry point at #root
+
+<Notes>
+
+- App.js export default, function vs. const
+- index.js - BTW grabbing DOM
+- index.html - div#root
+
+</Notes>
 
 ---
 
@@ -627,16 +660,31 @@ const newArray = [
 
 </CodeSurferColumns>
 
+<Notes>
+
+- (( just go through bullets ))
+- types of fragments - cannot add props, just organizational
+- returning null for no JSX
+
+</Notes>
+
 ---
 
 # Props
 
-## What are props?
+<Horizontal>
 
 - Data Down - Data into components
 - Events Up - Functions notifying parent components
 - Dangers of Prop drilling
-- Will tie to Life Cycles and Hooks
+
+</Horizontal>
+
+<Notes>
+
+- props are HTML custom attributes
+
+</Notes>
 
 ---
 
@@ -848,15 +896,32 @@ export default App;
 
 </CodeSurferColumns>
 
+<Notes>
+
+- props are powerful
+- but can be too powerful
+
+</Notes>
+
 ---
 
 # Class State
 
-## What is State?
+<Horizontal>
 
-- Stores data for a component
-- For mutated data
+- Stores data for a component - input, actions, flags, progress, API data
 - Retains across renders
+- Can be passed down as props to child components
+
+</Horizontal>
+
+<Notes>
+
+- State for tracking variablles
+- Common uses - user input, actions, flags, progress, API data
+- Can be passed down AS PROPS to child components
+
+</Notes>
 
 ---
 
@@ -879,7 +944,7 @@ class App extends Component {
 }
 ```
 
-- Set default in costructor
+- Set default in constructor
 
 </CodeStep>
 
@@ -894,7 +959,7 @@ class App extends Component {
 }
 ```
 
-- Set default in costructor
+- Set default in constructor
 - OR no constructor syntax
 
 </CodeStep>
@@ -919,7 +984,7 @@ class App extends Component {
 }
 ```
 
-- Set default in costructor
+- Set default in constructor
 - OR no constructor syntax
 - Change values with setState
 
@@ -935,10 +1000,12 @@ class App extends Component {
   };
 
   handleToggleMenu() {
-    () => {
+    setState((prevState) => {
       const { isMenuOpen } = this.state;
-      setState({ isMenuOpen: !isMenuOpen });
-    };
+      return {
+        isMenuOpen: !prevState.isMenuOpen,
+      };
+    });
   }
 
   setResults(results) {
@@ -952,7 +1019,7 @@ class App extends Component {
 }
 ```
 
-- Set default in costructor
+- Set default in constructor
 - OR no constructor syntax
 - Change values with setState
 - setState callback (ensure state is changed, since is async)
@@ -960,6 +1027,14 @@ class App extends Component {
 </CodeStep>
 
 </CodeSurferColumns>
+
+<Notes>
+
+- constructor and constructorless
+- setState - async, can make "sync" with cb
+- cb setState to debug if state not updating
+
+</Notes>
 
 ---
 
@@ -994,13 +1069,32 @@ class App extends Component {
   title={`React Lifecycle Methods`}
 />
 
+<Notes>
+
+- These are most common lifecycle Hooks
+- Many deprecated, others very uncommon
+
+</Notes>
+
 ---
 
 # componentDidMount
 
+<Horizontal>
+
 - API Calls
 - Animations
 - Listeners
+
+</Horizontal>
+
+<Notes>
+
+- AngularJS $onInit)()
+- Angular ngAfterContentInit
+- Vue mounted
+
+</Notes>
 
 ---
 
@@ -1205,6 +1299,12 @@ class BookList extends Component {
 
 </CodeSurferColumns>
 
+<Notes>
+
+- note async await use try catch blocks
+
+</Notes>
+
 ---
 
 # componentDidUpdate
@@ -1216,6 +1316,12 @@ class BookList extends Component {
 - not called on initial render
 
 </Horizontal>
+
+<Notes>
+
+- used when props or state change
+
+</Notes>
 
 ---
 
@@ -1267,7 +1373,7 @@ class BookList extends Component {
 
 ```
 
-- Assume isAuthenticated is a prop passed in... want to hide books if false
+- Assume isAuthenticated is a prop passed in
 - use compoonentDidUpdate to watch for props or state changes
 
 </CodeStep>
@@ -1276,7 +1382,7 @@ class BookList extends Component {
 
 <Notes>
 
-- test notes
+- Call functions accordingly with different props or state
 
 </Notes>
 
@@ -1291,6 +1397,12 @@ class BookList extends Component {
 - Removing event listeners
 
 </Horizontal>
+
+<Notes>
+
+- often neglected - for performance, memory leaks
+
+</Notes>
 
 ---
 
@@ -1381,6 +1493,12 @@ class WindowEventWrapper extends Component {
 </CodeStep>
 
 </CodeSurferColumns>
+
+<Notes>
+
+- BTW components can just return functionality, not just JSX
+
+</Notes>
 
 ---
 
@@ -2039,7 +2157,7 @@ export default BookList;
   <BasicGrid gridAutoFlow="row">
     <Steps>
       <div className="box box-badass p-2 text-center">
-        <span>Functional components</span>
+        <span>Class to Function</span>
       </div>
       <div className="box box-badass p-2 text-center">
         <span>useState</span>
@@ -2048,13 +2166,13 @@ export default BookList;
         <span>useEffect</span>
       </div>
       <div className="box box-badass p-2 text-center">
-        <span>useCallback</span>
-      </div>
-      <div className="box box-badass p-2 text-center">
-        <span>useMemo</span>
-      </div>
-      <div className="box box-badass p-2 text-center">
         <span>useRef</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>React.memo</span>
+      </div>
+      <div className="box box-badass p-2 text-center">
+        <span>useCallback, useMemo</span>
       </div>
       <div className="box box-badass p-2 text-center">
         <span>useMyHook</span>
@@ -2081,6 +2199,1522 @@ export default BookList;
 - useState, destructuring value and setter
 - define functions before return
 - !passingValue ? passInFn : (val) => myFn(val)
+
+---
+
+# Class to Function
+
+<Horizontal>
+
+- state to useState
+- API calls to useEffect
+- watchers to useEffect
+- ref to useRef
+- useCallback, useMemo to avoid rerenders
+- useReducer, useContext
+- Only use hooks at top-level - not in conditionals, loops, nested functions
+
+</Horizontal>
+
+---
+
+# Class to Function Example
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class App extends Component {
+  componentDidMount() {...}
+  componentDidUpdate() {...}
+  componentWillUnmount() {...}
+  render() {
+    return <>...</>;
+  }
+}
+
+export default App;
+```
+
+- Start with a class
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class REMOVEApp extends Component {
+  componentDidMount() {...}
+  componentDidUpdate() {...}
+  componentWillUnmount() {...}
+  render() {
+    return <>...</>;
+  }
+}
+
+const App = () => {
+  return (<>...</>);
+}
+
+export default App;
+```
+
+- Start with a class
+- Change to a function
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class REMOVEApp extends Component {
+  componentDidMount() {...}
+  componentDidUpdate() {...}
+  componentWillUnmount() {...}
+  render() {
+    return <>...</>;
+  }
+}
+
+const App = () => {
+  useEffect(() => {
+    // componentDidMount functions
+  }, []);
+
+  return (<>...</>);
+}
+
+export default App;
+```
+
+- Start with a class
+- Change to a function
+- add useEffect with empty array for componentDidMount
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class REMOVEApp extends Component {
+  componentDidMount() {...}
+  componentDidUpdate() {...}
+  componentWillUnmount() {...}
+  render() {
+    return <>...</>;
+  }
+}
+
+const App = ({title}) => {
+  useEffect(() => {
+    // componentDidMount functions
+  }, []);
+
+  useEffect(() => {
+    // componentDidUpdate functions
+  }, [title]);
+
+  return (<>...</>);
+}
+
+export default App;
+```
+
+- Start with a class
+- Change to a function
+- add useEffect with empty array for componentDidMount
+- useEffect for props watchers for componentDidUpdate
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class REMOVEApp extends Component {
+  componentDidMount() {...}
+  componentDidUpdate() {...}
+  componentWillUnmount() {...}
+  render() {
+    return <>...</>;
+  }
+}
+
+const App = ({title}) => {
+  useEffect(() => {
+    // componentDidMount functions
+  }, []);
+
+  useEffect(() => {
+    // componentDidUpdate functions
+  }, [title]);
+
+  useEffect(() => {
+    return () => {
+      // componentWillUnmount functions
+    };
+  });
+
+  return (<>...</>);
+}
+
+export default App;
+```
+
+- Start with a class
+- Change to a function
+- add useEffect with empty array for componentDidMount
+- useEffect for props watchers for componentDidUpdate
+- useEffect return function for componentWillUnmount
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers 1:21
+import React from "react";
+
+const App = ({ title }) => {
+  useEffect(() => {
+    // componentDidMount functions
+  }, []);
+
+  useEffect(() => {
+    // componentDidUpdate functions
+  }, [title]);
+
+  useEffect(() => {
+    return () => {
+      // componentWillUnmount functions
+    };
+  });
+
+  return <>...</>;
+};
+
+export default App;
+```
+
+- Start with a class
+- Change to a function
+- add useEffect with empty array for componentDidMount
+- useEffect for props watchers for componentDidUpdate
+- useEffect return function for componentWillUnmount
+- Remove class code
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+---
+
+# useState
+
+<Horizontal>
+
+- understand destructuring syntax of getter and setter
+- can be used with watcher useEffect functions
+
+</Horizontal>
+
+---
+
+# useState example
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+import React, { Component } from "react";
+
+class App extends Component {
+  state = {
+    isDarkMode: false,
+  };
+
+  handleSetDarkMode() {
+    const { isDarkMode } = this.state;
+    this.setState({ isDarkMode: !isDarkMode });
+  }
+
+  render() {
+    return (
+      <>
+        <button onClick={() => this.handleSetDarkMode()}>toggle</button>
+      </>
+    );
+  }
+}
+
+export default App;
+```
+
+- Convert class to function
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { useState, Component } from "react";
+
+class REMOVEApp extends Component {
+  state = {
+    isDarkMode: false,
+  };
+
+  handleSetDarkMode() {
+    const { isDarkMode } = this.state;
+    this.setState({ isDarkMode: !isDarkMode });
+  }
+
+  render() {
+    return (
+      <>
+        <button onClick={() => this.handleSetDarkMode()}>toggle</button>
+      </>
+    );
+  }
+}
+
+const App = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setIsDarkMode(!isDarkMode)}>toggle</button>
+    </>
+  );
+};
+
+export default App;
+```
+
+- Convert class to function
+- useState, destructure getter/setter
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers 1:13
+import React, { useState } from "react";
+
+const App = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setIsDarkMode(!isDarkMode)}>toggle</button>
+    </>
+  );
+};
+
+export default App;
+```
+
+- Convert class to function
+- useState, destructure getter/setter
+- Remove class remnants
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { useState } from "react";
+
+const App = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [count, setCount] = useState(0);
+
+  return (
+    <>
+      <button onClick={() => setIsDarkMode(!isDarkMode)}>toggle</button>
+      <button onClick={() => setCount(count + 1)}>count: {count}</button>
+    </>
+  );
+};
+
+export default App;
+```
+
+- Convert class to function
+- useState, destructure getter/setter
+- Remove class remnants
+- counter example
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { useState, useEffect } from "react";
+import isEmpty from 'lodash/isEmpty';
+
+const App = () => {
+  const [ apiError, setApiError ] = useState(null);
+  const [ books, setBooks ] = useState([]);
+
+  useEffect(async () => {
+    try {
+      const booksRes = await fetch('https://example.com/api/books');
+      const books = await booksRes.json();
+      setBooks(books);
+      setApiError(false);
+    } catch() {
+      setApiError(true);
+    }
+  }, [])
+
+  return (
+    <ul>
+      {!apiError && !isEmpty(books) && books.map( b => (
+        <li key={b.id}>{b.title}</li>
+      ))}
+    </ul>
+  );
+};
+
+export default App;
+```
+
+- Convert class to function
+- useState, destructure getter/setter
+- Remove class remnants
+- counter example
+- data collection example
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+---
+
+# useEffect
+
+<Horizontal>
+
+- empty array for Mounting
+- varibles in brackets to run when those values changed
+- useing Memo to avoid rerenders
+- callback function when unmounting / cleanup
+
+</Horizontal>
+
+---
+
+# useEffect example
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+import React, { useState, useEffect } from 'react';
+
+const BookList = () => {
+  const [books, setBooks] = useState([]);
+
+  useEffect( async () => {
+    try {
+      const booksRes = await fetch('...');
+      const books = await booksRes.json();
+      setBooks(books);
+    } catch(error) {}
+  }, []);
+
+  return (
+    <section>
+      ...
+    </section>>
+  );
+}
+
+export default BookList;
+```
+
+- useEffect empty array on mount
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { useState, useEffect } from 'react';
+
+const BookList = ({bookListType}) => {
+  const [books, setBooks] = useState([]);
+
+  useEffect( async () => {
+    try {
+      const booksRes = await fetch('...');
+      const books = await booksRes.json();
+      setBooks(books);
+    } catch(error) {}
+  }, [bookListType]);
+
+  return (
+    <section>
+      ...
+    </section>>
+  );
+}
+
+export default BookList;
+```
+
+- useEffect empty array on mount
+- add to dependency array to run on changes
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { useState, useEffect } from 'react';
+
+const BookList = ({bookListType}) => {
+  const [books, setBooks] = useState([]);
+  let timeoutHandle = window.setTimeout(() => {...});
+
+  useEffect( async () => {
+    try {
+      const booksRes = await fetch('...');
+      const books = await booksRes.json();
+      setBooks(books);
+    } catch(error) {}
+
+    return () => {
+      if (timeoutHandle) {
+        clearTimeout(timeoutHandle)
+      }
+    }
+  }, [bookListType]);
+
+  return (
+    <section>
+      ...
+    </section>>
+  );
+}
+
+export default BookList;
+```
+
+- useEffect empty array on mount
+- add to dependency array to run on changes
+- useEffect return function for cleanup
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="GoCoach AutoFocus.tsx" 1:25
+import React, { FC, useEffect, useRef } from "react";
+import "./AutoFocus.scss";
+
+interface IAutoFocusProps {
+  children?: React.ReactNode;
+}
+
+const AutoFocus: FC<IAutoFocusProps> = ({ children }) => {
+  // prettier-ignore
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (elementRef !== null && elementRef.current !== null) {
+      elementRef.current.focus();
+    }
+  }, [elementRef]);
+
+  return (
+    <span tabIndex={0} ref={elementRef} className="auto-focus">
+      {children}
+    </span>
+  );
+};
+
+export default AutoFocus;
+```
+
+- useEffect empty array on mount
+- add to dependency array to run on changes
+- useEffect return function for cleanup
+- TypeScript auto focus wrapper example
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="GoCoach FadeIn.tsx" 1:32
+import React, { ReactNode, FC, useState, useEffect } from "react";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+import "./FadeIn.scss";
+
+interface IFadeInProps {
+  stagger?: number;
+  children?: ReactNode;
+}
+
+const FadeIn: FC<IFadeInProps> = ({ stagger = 500, children }) => {
+  const [showItem, setShowItem] = useState(false);
+
+  useEffect(() => {
+    setShowItem(true);
+  }, []);
+
+  return (
+    <TransitionGroup className="gc-fade-in">
+      {showItem && (
+        <CSSTransition
+          key="gc-fade-in"
+          timeout={stagger}
+          classNames="gc-fade-in__item"
+        >
+          {children}
+        </CSSTransition>
+      )}
+    </TransitionGroup>
+  );
+};
+
+export default FadeIn;
+```
+
+- useEffect empty array on mount
+- add to dependency array to run on changes
+- useEffect return function for cleanup
+- TypeScript auto focus wrapper example
+- TypeScript fade in example
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+---
+
+# useRef
+
+<Horizontal>
+
+- values persist lifetime of component
+- DOM manipulation
+- tracking values
+
+</Horizontal>
+
+---
+
+# useRef Example
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+import React, { useRef } from "react";
+
+const TextInputWithFocusButton = () => {
+  const inputEl = useRef(null);
+
+  const handleButtonClick = () => {
+    inputEl.current.focus();
+  };
+
+  return (
+    <>
+      <input ref={inputEl} type="text" />
+      <button onClick={handleButtonClick}>Focus the input</button>
+    </>
+  );
+};
+
+export default TextInputWithFocusButton;
+```
+
+- Similar to Class-based approach with useRef
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { useRef } from "react";
+
+const Form = () => {
+  const nameEl = useRef(null);
+  const passwordEl = useRef(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const payload = {
+      name: nameEl.current.value,
+      password: passwordEl.current.value,
+    }
+    ...
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input ref={nameEl} type="text" placeholder="Enter username"/>
+      <input ref={passwordEl} type="password" />
+      <input type="submit">Submit</input>
+    </form>
+  );
+};
+
+export default Form;
+```
+
+- Similar to Class-based approach with useRef
+- useRef for forms
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+---
+
+# React.memo
+
+<Horizontal>
+
+- For memoized callbacks (avoid using memory to recalculate function definition)
+- only changes if a dependency changes (avoids unnecessary rerenders)
+- memory heavy, only use with components that need optimization
+- avoid with components with props that change frequently
+
+</Horizontal>
+
+---
+
+# React.memo example
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+import React, { memo } from "react";
+
+const MyMemoizedLongList = memo(({ items = [], onRemoveItem }) => {
+  const sortedFilteredItems = items
+    .filter((item) => item.active)
+    .sort((a, b) => a.created - b.created);
+
+  return (
+    <ul>
+      {sortedFilteredItems.map((item) => (
+        <li key={item.id}>
+          <span>{item.description}</span>
+          <button onClick={() => onRemoveItem(item.id)}>Remove</button>
+        </li>
+      ))}
+    </ul>
+  );
+});
+
+export default MyMemoizedLongList;
+```
+
+- Available in React v.16.6
+- Avoids rerenders when props do not change
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import React, { memo } from "react";
+import isEqual from "lodash/isEqual"; // deep comparison
+
+const MyMemoizedLongList = memo(
+  ({ items = [], onRemoveItem }) => {
+    const sortedFilteredItems = items
+      .filter((item) => item.active)
+      .sort((a, b) => a.created - b.created);
+
+    return (
+      <ul>
+        {sortedFilteredItems.map((item) => (
+          <li key={item.id}>
+            <span>{item.description}</span>
+            <button onClick={() => onRemoveItem(item.id)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+    );
+  },
+  (prevProps, nextProps) => {
+    if (isEqual(prevProps.items, nextProps.items)) {
+      return true; // props equal, do not update component
+    }
+    return false; // props not equal, update component
+  }
+);
+
+export default MyMemoizedLongList;
+```
+
+- Available in React v.16.6
+- Avoids rerenders when props do not change
+- Second arg function to allow rerender on deep comparison
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import Reactfrom "react";
+import isEqual from "lodash/isEqual";
+
+const MyMemoizedLongList = ({ items = [], onRemoveItem }) => {
+  const sortedFilteredItems = items
+    .filter((item) => item.active)
+    .sort((a, b) => a.created - b.created);
+
+  return (
+    <ul>
+      {sortedFilteredItems.map((item) => (
+        <li key={item.id}>
+          <span>{item.description}</span>
+          <button onClick={() => onRemoveItem(item.id)}>Remove</button>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+export default React.memo(MyMemoizedLongList, (prevProps, nextProps) => {
+  if (isEqual(prevProps.items, nextProps.items)) {
+    return true;
+  }
+  return false;
+});
+```
+
+- Available in React v.16.6
+- Avoids rerenders when props do not change
+- Second arg function to allow rerender on deep comparison
+- other common syntax
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+---
+
+# useCallback + useMemo
+
+<Horizontal>
+
+- useCallback for repeated operations
+- useMemo for the same thing
+- avoid using memory to recalculate function definition
+- only called if a dependency changes (avoids unnecessary rerenders)
+
+```js
+useCallback(() => {}, [dep1, dep2]);
+useMemo(() => () => {}, [dep1, dep2]);
+```
+
+</Horizontal>
+
+---
+
+# useCallback + useMemo Example
+
+<IframeLoader
+  src="https://codesandbox.io/embed/pedantic-euler-tftij?autoresize=1&codemirror=1&expanddevtools=1&fontsize=14&hidenavigation=1&theme=dark"
+  title={"useCallback useMemo example"}
+/>
+
+<Notes>
+
+- check console for renders
+- useMemo has slightly different syntax
+- useCallback vs. useMemo?
+
+</Notes>
+
+---
+
+# Custom Hooks
+
+<Horizontal>
+
+- Use to wrap other hooks
+
+</Horizontal>
+
+---
+
+# Custom Hooks Examples
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers title="GoCoach useWindowSize.ts"
+import { useState, useEffect } from 'react';
+
+const getSize = () => ({
+  innerHeight: window.innerHeight,
+  innerWidth: window.innerWidth,
+  outerHeight: window.outerHeight,
+  outerWidth: window.outerWidth,
+});
+
+const useWindowSize = () => {
+  const [windowSize, setWindowSize] = useState(getSize());
+
+  const handleResize () => {
+    setWindowSize(getSize());
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return windowSize;
+}
+
+export default useWindowSize;
+```
+
+- Example - useWindowSize
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="GoCoach useLocalStorage.ts"
+import { useState } from 'react';
+
+const useLocalStorage = <T>(
+  key: string,
+  initialValue: T
+): [T, (valueToStore: T) => void] => {
+  const [storedValue, setStoredValue] = useState<T>((): T => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return (item ? JSON.parse(item) : initialValue) as T;
+    } catch (error) {
+      console.error(error);
+      return initialValue as T;
+    }
+  });
+
+  const setValue = (value: any) => {
+    try {
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return [storedValue as T, setValue];
+}
+
+export default useLocalStorage;
+```
+
+- Example - useWindowSize
+- Example - useLocalStorage
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+<Notes>
+
+- TS can get quite complex, reach for 3rd party solutions
+- useWindowSize notice only returning state value, updating via window events
+
+</Notes>
+
+---
+
+# 3rd Party Hooks
+
+<Horizontal>
+
+- React Router
+- React Hook Form
+- Redux toolkit
+- rehooks for tons of packages
+- <a href="https://github.com/rehooks/awesome-react-hooks" target="_blank">
+    Github page awesome-hooks-react
+  </a>
+
+</Horizontal>
+
+---
+
+# useReducer
+
+<Horizontal>
+
+- alternative to useState
+- use with useContext for mini Redux
+
+</Horizontal>
+
+---
+
+# useState to useReducer example
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers title="useState"
+import React, { useState } from "react";
+
+export default () => {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={setCount(count + 1)}>+</button>
+      <button onClick={setCount(count - 1)}>-</button>
+    </div>
+  );
+};
+```
+
+- start with useState
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="useReducer"
+import React, { useReducer } from "react";
+
+const reducer = (state, action) => {
+  switch(action.type) {
+    case: 'INCREMENT':
+      return state + 1;
+    case: 'INCREMENT':
+      return state - 1;
+    default:
+      return state;
+  }
+}
+
+export default () => {
+  const [count, dispatch] = useReducer(reducer, 0);
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={dispatch({ type: 'INCREMENT'})}>+</button>
+      <button onClick={dispatch({ type: 'DECREMENT'})}>-</button>
+    </div>
+  );
+};
+```
+
+- start with useState
+- refactored to useReducer
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="approaching Redux"
+import React, { useReducer } from "react";
+
+const initialStore = {
+  count: 0,
+};
+
+const reducer = (store, action) => {
+  switch(action.type) {
+    case: 'UPDATE_COUNT':
+      return {
+        ...store,
+        count: store.count + action.value,
+      }
+    default:
+      return store;
+  }
+}
+
+export default () => {
+  const [{count}, dispatch] = useReducer(reducer, initialStore);
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={dispatch({ type: 'UPDATE_COUNT', value: 1 })}>+</button>
+      <button onClick={dispatch({ type: 'UPDATE_COUNT', value: -1 })}>-</button>
+    </div>
+  );
+};
+```
+
+- start with useState
+- refactored to useReducer
+- refactor to be closer to Redux - pass vals, rename to store
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+---
+
+# useContext
+
+<Horizontal>
+
+- a portal to any component
+- basic implementations for app-wide settings
+- more complex as alternative to Redux
+
+</Horizontal>
+
+---
+
+# useContext Example
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers title="useContext"
+import React from "react";
+
+const App = () => {
+  return (
+    <div>
+      <ThemedButton />
+    </div>
+  );
+};
+
+const ThemedButton = () => {
+  return <button>button</button>;
+};
+```
+
+- start with an app and a button component
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="useContext"
+import React, { createContext } from "react";
+
+const themes = {
+  light: { foreground: "#000000", background: "#eeeeee" },
+  dark: { foreground: "#ffffff", background: "#222222" },
+};
+
+const ThemeContext = createContext(themes.dark);
+
+const App = () => {
+  return (
+    <ThemeContext.Provider>
+      <ThemedButton />
+    </ThemeContext.Provider>
+  );
+};
+
+const ThemedButton = () => {
+  return <button>button</button>;
+};
+```
+
+- start with an app and a button component
+- Create a context with default values, wrap App with Provider
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="useContext"
+import React, { createContext, useContext } from "react";
+
+const themes = {
+  light: { foreground: "#000000", background: "#eeeeee" },
+  dark: { foreground: "#ffffff", background: "#222222" },
+};
+
+const ThemeContext = createContext(themes.dark);
+
+const App = () => {
+  return (
+    <ThemeContext.Provider>
+      <ThemedButton />
+    </ThemeContext.Provider>
+  );
+};
+
+const ThemedButton = () => {
+  const theme = useContext(ThemeContext);
+  return (
+    <button
+      style={{
+        background: theme.background,
+        color: theme.foreground,
+      }}
+    >
+      styled button
+    </button>
+  );
+};
+```
+
+- start with an app and a button component
+- create a context with default values, wrap App with Provider
+- pull out values in any component with useContext()
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="useContext"
+import React, { createContext, useContext } from "react";
+
+const themes = {
+  light: { foreground: "#000000", background: "#eeeeee" },
+  dark: { foreground: "#ffffff", background: "#222222" },
+};
+
+const ThemeContext = createContext(themes.dark);
+
+const App = () => {
+  return (
+    <ThemeContext.Provider>
+      <ThemedButton />
+    </ThemeContext.Provider>
+  );
+};
+
+const ThemedButton = () => {
+  const theme = useContext(ThemeContext);
+  return (
+    <button
+      style={{
+        background: theme.background,
+        color: theme.foreground,
+      }}
+    >
+      styled button
+    </button>
+  );
+};
+```
+
+- start with an app and a button component
+- create a context with default values, wrap App with Provider
+- pull out values in any component with useContext()
+- but how do you change values in the context?... mini Redux
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+---
+
+# Mini Redux - useContext, useReducer
+
+<Horizontal>
+
+- Less boilerplate than Redux
+- Can have multiple contexts/stores, Redux can only have one store
+- Caveat - no time travel dev tools
+
+</Horizontal>
+
+---
+
+# Mini Redux Example
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers title="AppReducer.ts"
+import IStore from "./IStore";
+import IAction from "./IAction";
+import APP_ACTIONS from "./APP_ACTIONS";
+
+const appReducer = (store: IStore, action: IAction) => {
+  switch (action.type) {
+    case APP_ACTIONS.TOGGLE_LEFT_DRAWER:
+      return {
+        ...store,
+        isLeftDrawerOpen: action.value,
+      };
+    case APP_ACTIONS.TOGGLE_DARK_MODE:
+      return {
+        ...store,
+        isDarkMode: action.value,
+      };
+    case APP_ACTIONS.SET_IS_LOADING:
+      return {
+        ...store,
+        isLoading: action.value,
+      };
+    default:
+      return { ...store };
+  }
+};
+
+export default appReducer;
+```
+
+- example reducer file
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="APP_ACTIONS.ts"
+enum APP_ACTIONS {
+  SET_IS_LOADING = 'APP_ACTIONS.SET_IS_LOADING',
+  TOGGLE_DARK_MODE = 'APP_ACTIONS.TOGGLE_DARK_MODE',
+  TOGGLE_LEFT_DRAWER = 'APP_ACTIONS.TOGGLE_LEFT_DRAWER',
+  LOG_IN = 'APP_ACTIONS.LOG_IN',
+}
+
+export default APP_ACTIONS;
+```
+
+- example reducer file
+- example actions file
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="initialStore.ts"
+import IStore from "./IStore";
+
+const initialStore: IStore = {
+  isLoading: true,
+  isLeftDrawerOpen: false,
+  isDarkMode: true,
+};
+
+export default initialStore;
+```
+
+- example reducer file
+- example actions file
+- example initialStore file
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="AppStore.ts" 1:37
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  FC,
+  ReactNode,
+  Dispatch,
+} from 'react';
+import IState from './IStore';
+import IAction from './IAction';
+import initialStore from './initialStore';
+export const StoreContext = createContext<any>({});
+
+interface IStoreProvider {
+  reducer: (state: IState, action: IAction) => IState;
+  initialStore: IState;
+  children: ReactNode;
+}
+
+const StoreProvider: FC<IStoreProvider> = ({
+  reducer,
+  initialStore,
+  children,
+}) => {
+  const [state, dispatch] = useReducer(reducer, initialStore);
+
+  return (
+    <StoreContext.Provider value={[state, dispatch]}>
+      {children}
+    </StoreContext.Provider>
+  );
+};
+
+export const useStoreValue = (): [IState, Dispatch<IAction>] =>
+  useContext(StoreContext) as any;
+
+export default StoreProvider;
+```
+
+- example reducer file
+- example actions file
+- example initialStore file
+- example AppStore file
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="Gatsby top-layout.tsx" 1:19
+import StoreProvider from '../../context';
+import initialStore from '../../context/initialStore';
+import AppReducer from '../../context/AppReducer';
+...
+const TopLayout = ({ children, theme }: ITopLayout) => {
+  return (
+    <StoreProvider initialStore={initialStore} reducer={AppReducer}>
+      <ThemeWrapper theme={theme}>
+        <Header />
+        <MainFooterWrapper>
+          <Main>{children}</Main>
+          <Footer />
+        </MainFooterWrapper>
+      </ThemeWrapper>
+    </StoreProvider>
+  );
+};
+
+export default TopLayout;
+```
+
+- example reducer file
+- example actions file
+- example initialStore file
+- example AppStore file
+- example top-level file in Gatsby
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="ThemeWrapper.tsx" 1:26
+const ThemeWrapper = ({ theme, children }: IThemeWrapper) => {
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  const [{ isDarkMode }, dispatch] = useStoreValue();
+
+  useEffect(() => {
+    dispatch({
+      type: APP_ACTIONS.TOGGLE_DARK_MODE,
+      value: prefersDarkMode,
+    });
+  }, [prefersDarkMode]);
+
+  const adjustedTheme = useMemo(() => {
+    return isDarkMode ? theme.darkTheme : theme.lightTheme;
+  }, [isDarkMode]);
+
+  return (
+    <ThemeTopLayout theme={adjustedTheme}>
+      <CssBaseline />
+      <>
+        <PageBackdropLoader />
+        {children}
+        <LeftDrawer />
+      </>
+    </ThemeTopLayout>
+  );
+};
+```
+
+- example reducer file
+- example actions file
+- example initialStore file
+- example AppStore file
+- example top-level file in Gatsby
+- example wrapper using store value
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="LeftDrawer.tsx" 1:25
+...
+import { makeStyles } from '@material-ui/styles';
+...
+const useStyles = makeStyles((theme: Theme) => ({ ... });
+
+const LeftDrawer = ({}: ILeftDrawer) => {
+  const [{ isDarkMode, isLeftDrawerOpen }, dispatch] = useStoreValue();
+  const classes = useStyles();
+
+  const handleClose = () => {
+    dispatch({
+      type: APP_ACTIONS.TOGGLE_LEFT_DRAWER,
+      value: false,
+    });
+  };
+
+  const handleOpen = () => {
+    dispatch({
+      type: APP_ACTIONS.TOGGLE_LEFT_DRAWER,
+      value: true,
+    });
+  };
+  ...
+  return (...)
+}
+```
+
+- example reducer file
+- example actions file
+- example initialStore file
+- example AppStore file
+- example top-level file in Gatsby
+- example wrapper using store value
+- example slidebar using store value
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+<Notes>
+
+- reducers are just switch statements
+- good idea to avoid magic strings - enums
+- separate files for easy cognitive navigation
+- useReducer destructuring, passing in value to store
+- useStoreValue as custom hook - just returns useContext
+- wrapping apps, wrapping themes
+- passing initialStore and reducer
+- grabbing values from useStoreValue
+- dispatch shape of type and value
+- more examples of hooks - useStyoles
+
+</Notes>
+
+---
+
+# Mini Redux Example - CodeQuizPro
+
+<IframeLoader
+  src={`https://heuristic-shockley-4b794e.netlify.app/`}
+  title={"CodeQuizPro demo built with Gatsby"}
+/>
 
 ---
 

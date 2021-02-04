@@ -1,6 +1,6 @@
 import colors from "./styles/colors";
 
-export default {
+const theme = {
   googleFont: "Roboto",
   fonts: {
     body: "Roboto, sans-serif",
@@ -9,7 +9,6 @@ export default {
   colors: {
     text: colors.badass,
     background: colors.oxfordBlue,
-    primary: "blue",
   },
   styles: {
     h1: {
@@ -59,3 +58,31 @@ export default {
     },
   },
 };
+
+export const stateTheme = {
+  ...theme,
+  colors: {
+    text: colors.uranianBlue,
+    background: colors.oxfordBlue,
+  },
+  styles: {
+    h1: {
+      borderBottom: `1px solid ${colors.uranianBlue}`,
+    },
+  },
+};
+
+export const reviewTheme = {
+  ...theme,
+  colors: {
+    text: colors.sandyBrown,
+    background: colors.oxfordBlue,
+  },
+  styles: {
+    h1: {
+      borderBottom: `1px solid ${colors.sandyBrown}`,
+    },
+  },
+};
+
+export default theme;
