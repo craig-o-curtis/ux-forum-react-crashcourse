@@ -8,7 +8,7 @@
 
 ## Build
 
-- URL:
+- URL: https://quizzical-mestorf-62f91d.netlify.app/
 
 ### Controls
 
