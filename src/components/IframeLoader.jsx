@@ -10,6 +10,7 @@ const IframeLoader = ({ src, title = "" }) => (
         borderRadius: "4px",
         overflow: "hidden",
         flex: "1 1 auto",
+        maxWidth: "100%",
       }}
       title={title}
       allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"

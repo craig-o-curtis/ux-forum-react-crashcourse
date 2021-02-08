@@ -64,13 +64,19 @@ import colors, { colorMap } from "./styles/colors";
         <span>Hooks</span>
       </div>
       <div className="box box-uranianBlue p-2 text-center">
+        <span>Context</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
         <span>Redux</span>
       </div>
       <div className="box box-uranianBlue p-2 text-center">
-        <span>Context</span>
+        <span>Redux Toolkit</span>
       </div>
       <div className="box box-sandyBrown p-2 text-center">
-        <span>Gotchas, Q&A</span>
+        <span>Gotchas</span>
+      </div>
+      <div className="box box-sandyBrown p-2 text-center">
+        <span>Q&A</span>
       </div>
       <div className="box box-sandyBrown p-2 text-center">
         <span>Activity</span>
@@ -2178,10 +2184,10 @@ export default BookList;
         <span>useMyHook</span>
       </div>
       <div className="box box-badass p-2 text-center">
-        <span>Mini Redux - useContext, useReducer</span>
-      </div>
-      <div className="box box-badass p-2 text-center">
         <span>3rd Party Hooks</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>Mini Redux - useContext, useReducer</span>
       </div>
     </Steps>
   </BasicGrid>
@@ -3451,7 +3457,7 @@ const ThemedButton = () => {
 
 ---
 
-# Mini Redux Example
+# Mini Redux Example - useContext, useReducer
 
 <CodeSurferColumns themes={[nightOwl,nightOwl]}>
 
@@ -3718,6 +3724,15 @@ const LeftDrawer = ({}: ILeftDrawer) => {
 
 ---
 
+# Class Context Example
+
+<IframeLoader
+  src={"https://d6jtdo9jhz4ae.cloudfront.net/"}
+  title={"CCC Taft Guided Pathways"}
+/>
+
+---
+
 <!-- Page - Redux -->
 
 # Redux
@@ -3725,6 +3740,24 @@ const LeftDrawer = ({}: ILeftDrawer) => {
 <MainContent maxWidth={"100%"}>
   <BasicGrid gridAutoFlow="row">
     <Steps>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>initialStore(s)</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>Actions</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>Action types</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>reducers</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>selectors</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>thunks</span>
+      </div>
       <div className="box box-uranianBlue p-2 text-center">
         <span>connect()</span>
       </div>
@@ -3734,34 +3767,467 @@ const LeftDrawer = ({}: ILeftDrawer) => {
       <div className="box box-uranianBlue p-2 text-center">
         <span>mapDispatchToProps</span>
       </div>
-      <div className="box box-uranianBlue p-2 text-center">
-        <span>Actions</span>
-      </div>
-      <div className="box box-uranianBlue p-2 text-center">
-        <span>Thunks</span>
-      </div>
-      <div className="box box-uranianBlue p-2 text-center">
-        <span>Redux Dev Tools</span>
-      </div>
     </Steps>
   </BasicGrid>
 </MainContent>
 
 ---
 
-# Context - Mini Redux
+# Redux Devtools
 
-<MainContent>
+<Split>
+
+<img
+  src="https://user-images.githubusercontent.com/7957859/48663602-3aac4900-ea9b-11e8-921f-97059cbb599c.png"
+  title="Chrome Extension Redux Devtools"
+/>
+
+- Browser extension
+- manually alter state
+- time travel - see state changes
+
+</Split>
+
+---
+
+# Redux Example
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers title="Class component setup - NoteAffect example"
+import React, { Component } from 'react';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+
+const store = createStore(
+  combineReducers(Reducers),
+  process.env.NODE_ENV !== 'production' &&
+    window.__REDUX_DEVTOOLS_EXTENSION__ &&
+    window.__REDUX_DEVTOOLS_EXTENSION__(),
+  applyMiddleware(thunk);
+
+class App extends Component {
+  ...
+  render() {
+    return (
+      <Provider store={store}>
+        ...
+      </Provider>
+    );
+  }
+}
+```
+
+- Class-based React - add devtools, thunks for API calls, wrap with a Provider passing in the store
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="Hook component setup - Cisco example"
+import React, { Suspense } from "react";
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware, compose } from "redux";
+import rootReducer from "./redux/reducers";
+import ReduxThunk from "redux-thunk";
+import Loader from "./components/Loader";
+
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+export const store = createStore(
+  rootReducer,
+  composeEnhancer(applyMiddleware(ReduxThunk))
+);
+
+const App = () => {
+  return (
+    <Suspense fallback={<Loader />}>
+      <Provider store={store}>...</Provider>
+    </Suspense>
+  );
+};
+```
+
+- Class-based React - add devtools, thunks for API calls, wrap with a Provider passing in the store
+- Hooks based is similar - devtools, thunks, Provider
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="npm i redux react-redux"
+export const todosInitialStore = {
+  todos: [],
+};
+
+export const appInitialStore = {
+  isLoading: false,
+};
+```
+
+- Start with the initialStores (default values for data, flags)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers 4:6
+export const dataInitialStore = {...};
+export const appInitialStore = {...};
+
+export const ADD_TODO = "ADD_TODO";
+export const REMOVE_TODO = "REMOVE_TODO";
+export const SET_IS_LOADING = "SET_IS_LOADING";
+```
+
+- Start with the initialStores (default values for data, flags)
+- Add Action types (to avoid magic strings, passed as value to dispatch)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers 8:19
+export const dataInitialStore = {...};
+export const appInitialStore = {...};
+
+export const ADD_TODO = "ADD_TODO";
+export const REMOVE_TODO = "REMOVE_TODO";
+export const SET_IS_LOADING = "SET_IS_LOADING";
+
+export const AddTodo = (todo) => ({
+  type: ADD_TODO,
+  value: todo
+});
+export const RemoveTodo = (todo) => ({
+  type: REMOVE_TODO,
+  value: todo,
+});
+export const SetIsLoading = (isLoading) => ({
+  type: REMOVE_TODO,
+  value: isLoading,
+});
+
+```
+
+- Start with the initialStores (default values for data, flags)
+- Add Action types (to avoid magic strings, passed as value to dispatch)
+- Add Actions (pass through objects for reducers)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers 12:30
+export const todosInitialStore = {...};
+export const appInitialStore = {...};
+
+export const ADD_TODO = "ADD_TODO";
+export const REMOVE_TODO = "REMOVE_TODO";
+export const SET_IS_LOADING = "SET_IS_LOADING";
+
+export const AddTodo = (todo) => ({...});
+export const RemoveTodo = (todo) => ({...});
+export const SetIsLoading = (isLoading) => ({...});
+
+export const dataReducer = (
+  dataStore = dataInitialStore,
+  action,
+) => {
+  switch(action.type) {
+    case ADD_TODO:
+      return {
+        ...dataStore,
+        todos: dataStore.todos.concat(todo),
+      }
+    case REMOVE_TODO:
+      return {
+        ...dataStore,
+        todos: dataStore.todos.filter(todo => todo.id !== value.id)
+      }
+    default:
+      return dataStore;
+  }
+}
+
+```
+
+- Start with the initialStores (default values for data, flags)
+- Add Action types (to avoid magic strings, passed as value to dispatch)
+- Add Actions (pass through objects for reducers)
+- Add a reducer for data (switch statement to change the store)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers 14:27
+export const todosInitialStore = {...};
+export const appInitialStore = {...};
+
+export const ADD_TODO = "ADD_TODO";
+export const REMOVE_TODO = "REMOVE_TODO";
+export const SET_IS_LOADING = "SET_IS_LOADING";
+
+export const AddTodo = (todo) => ({...});
+export const RemoveTodo = (todo) => ({...});
+export const SetIsLoading = (isLoading) => ({...});
+
+export const dataReducer = (...) => {...}
+
+export const appReducer = (
+  appStore = appInitialStore,
+  action,
+) => {
+  switch(action.type) {
+    case SET_IS_LOADING:
+      return {
+        ...appStore,
+        isLoading: action.value,
+      }
+    default:
+      return appStore;
+  }
+}
+
+```
+
+- Start with the initialStores (default values for data, flags)
+- Add Action types (to avoid magic strings, passed as value to dispatch)
+- Add Actions (pass through objects for reducers)
+- Add a reducer for data (switch statement to change the store)
+- Add a reducer for app (switch statement to change the store)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers 14:27
+export const todosInitialStore = {...};
+export const appInitialStore = {...};
+
+export const ADD_TODO = "ADD_TODO";
+export const REMOVE_TODO = "REMOVE_TODO";
+export const SET_IS_LOADING = "SET_IS_LOADING";
+
+export const AddTodo = (todo) => ({...});
+export const RemoveTodo = (todo) => ({...});
+export const SetIsLoading = (isLoading) => ({...});
+
+export const dataReducer = (...) => {...}
+export const appReducer = (...) => {...}
+
+export const getTodosSelector = store => store.data.todos;
+export const getAppIsLoadingSelector = store => store.app.isLoading;
+
+```
+
+- Start with the initialStores (default values for data, flags)
+- Add Action types (to avoid magic strings, passed as value to dispatch)
+- Add Actions (pass through objects for reducers)
+- Add a reducer for data (switch statement to change the store)
+- Add a reducer for app (switch statement to change the store)
+- Add selectors (functions to grab a piece of the store)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers 1:14
+import { createStore, combineReducers } from 'redux';
+
+...
+
+export const dataReducer = (...) => {...}
+export const appReducer = (...) => {...}
+
+export const reducers = combineReducers({
+  data: dataReducer,
+  app: appReducer
+});
+export const configureStore = () => {
+  createStore(reducers),
+}
+```
+
+- Start with the initialStores (default values for data, flags)
+- Add Action types (to avoid magic strings, passed as value to dispatch)
+- Add Actions (pass through objects for reducers)
+- Add a reducer for data (switch statement to change the store)
+- Add a reducer for app (switch statement to change the store)
+- Add selectors (functions to grab a piece of the store)
+- Combine reducers, configure store (to make available to the app...)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="npm i redux-thunk redux-devtools-extension"
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+
+...
+
+export const reducers({
+  data: dataReducer,
+  app: appReducer
+});
+export const configureStore = () => {
+  createStore(
+    reducers,
+    composeWithDevTools(
+      applyMiddleware(thunk)
+    )
+  ),
+}
+```
+
+- Start with the initialStores (default values for data, flags)
+- Add Action types (to avoid magic strings, passed as value to dispatch)
+- Add Actions (pass through objects for reducers)
+- Add a reducer for data (switch statement to change the store)
+- Add a reducer for app (switch statement to change the store)
+- Add selectors (functions to grab a piece of the store)
+- Combine reducers (to make available to the app...)
+- Configure thunk, devtools (actions for async operations, API calls)
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+...
+// Action
+export const removeTodo = todo => ({
+    type: REMOVE_TODO,
+    payload: { todo },
+});
+...
+// Thunk
+export const removeTodoThunk = id => async dispatch => {
+  try {
+      const response = await fetch(`http://localhost:8080/todos/${id}`, {
+          method: 'delete'
+      });
+      const removedTodo = await response.json();
+      dispatch(removeTodo(removedTodo));
+  } catch (e) {
+      dispatch(displayAlert(e));
+  }
+}
+
+export const reducers({
+  data: dataReducer,
+  app: appReducer
+});
+export const configureStore = () => {
+  createStore(
+    reducers,
+    composeWithDevTools(
+      applyMiddleware(thunk)
+    )
+  ),
+}
+```
+
+- Start with the initialStores (default values for data, flags)
+- Add Action types (to avoid magic strings, passed as value to dispatch)
+- Add Actions (pass through objects for reducers)
+- Add a reducer for data (switch statement to change the store)
+- Add a reducer for app (switch statement to change the store)
+- Add selectors (functions to grab a piece of the store)
+- Combine reducers (to make available to the app...)
+- Configure thunk, devtools (actions for async operations, API calls)
+- Add thunks for async actions
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers 1:31
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+
+const TodoList = ({ todos, onRemovePressed, isLoading, startLoadingTodos }) => {
+  useEffect(() => {
+    startLoadingTodos();
+  }, []);
+
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <li key={todo.id}>
+          <span>{todo.name}</span>
+          <button onClick={onRemovePressed}>Remove</button>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const mapStateToProps = (sore) => ({
+  isLoading: getAppLoadingSelector(state),
+  todos: getTodosSelector(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  startLoadingTodos: () => dispatch(loadTodosThunk()),
+  onRemovePressed: (id) => dispatch(removeTodoThunk(id)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
+```
+
+- Finally, get to the usage of this stuff!
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+---
+
+# Example of Redux Thunk with Hooks
+
+<IframeLoader
+  src={`https://codesandbox.io/embed/74rykw70qq?codemirror=1&fontsize=14&hidenavigation=1&theme=dark`}
+  title={`Hooks Redux Thunk`}
+/>
+
+---
+
+# Million Ways to Store a Cat...
+
+<IframeLoader
+  src={`https://codesandbox.io/embed/lpp391lymm?fontsize=14&hidenavigation=1&theme=dark`}
+  title={`State Management Example`}
+/>
+
+---
+
+# Redux Toolkit (RTK)
+
+<MainContent maxWidth={"80%"}>
   <BasicGrid gridAutoFlow="row">
     <Steps>
       <div className="box box-uranianBlue p-2 text-center">
-        <span>Class Context</span>
+        <span>configureStore()</span>
       </div>
       <div className="box box-uranianBlue p-2 text-center">
-        <span>Hooks Context</span>
+        <span>createSlice()</span>
       </div>
       <div className="box box-uranianBlue p-2 text-center">
-        <span>Mini Redux Context</span>
+        <span>createAction()</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>createReducer()</span>
+      </div>
+      <div className="box box-uranianBlue p-2 text-center">
+        <span>createAsyncThunk()</span>
       </div>
     </Steps>
   </BasicGrid>
@@ -3769,12 +4235,296 @@ const LeftDrawer = ({}: ILeftDrawer) => {
 
 ---
 
-# Class Context Example
+# Redux Toolkit Main points
+
+<Horizontal>
+
+- Concept of slices - configuration files for reducers and actions
+- For API calls, still need to write thunks (can't do API calls in reducers)
+- Redux Toolkit tutorial -- skip to Advanced or will have problems later
+- Million ways to skin a cat, again... many different configurations
+- - Immur - can write mutable code, no worries about immutable syntax
+- - NOTE - danger of writing unsafe mutable code, stick with creating new objects, arrays
+
+</Horizontal>
+
+---
+
+# Exploring CRA Redux Template (Redux Toolkit©)
+
+<CodeSurferColumns themes={[nightOwl,nightOwl]}>
+
+<CodeStep>
+
+```js showNumbers
+// Start new project
+$ npx create-react-app my-app --template redux
+```
+
+- Starting with the redux template from CRA
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/app/store.js"
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from "../features/counter/counterSlice";
+
+export default configureStore({
+  reducer: {
+    counter: counterReducer,
+  },
+});
+```
+
+- Store configuration - adds reducer, imports a slice reducer
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/index.js"
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import store from "./app/store";
+import { Provider } from "react-redux";
+import * as serviceWorker from "./serviceWorker";
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById("root")
+);
+
+serviceWorker.unregister();
+```
+
+- Store configuration - adds reducer, imports a slice reducer
+- Familiar Provider, passing in store
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/features/counter/counterSlice.js"
+import { createSlice } from "@reduxjs/toolkit";
+
+export const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      // Redux Toolkit allows us to write "mutating" logic in reducers. It
+      // doesn't actually mutate the state because it uses the Immer library,
+      // which detects changes to a "draft state" and produces a brand new
+      // immutable state based off those changes
+      state.value += 1;
+    },
+    decrement: (state) => {
+      state.value -= 1;
+    },
+    incrementByAmount: (state, action) => {
+      state.value += action.payload;
+    },
+  },
+});
+export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+
+// The function below is called a thunk and allows us to perform async logic. It
+// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
+// will call the thunk with the `dispatch` function as the first argument. Async
+// code can then be executed and other actions can be dispatched
+export const incrementAsync = (amount) => (dispatch) => {
+  setTimeout(() => {
+    dispatch(incrementByAmount(amount));
+  }, 1000);
+};
+// The function below is called a selector and allows us to select a value from
+// the state. Selectors can also be defined inline where they're used instead of
+// in the slice file. For example: `useSelector((state) => state.counter.value)`
+export const selectCount = (state) => state.counter.value;
+
+export default counterSlice.reducer;
+```
+
+- Store configuration - adds reducer, imports a slice reducer
+- Familiar Provider, passing in store
+- Exploring the counterSlice:
+- - default export at bottom as counterSlice.reducer
+- - initial state defined in slice
+- - actions in reducers object, uses Immur (BEWARE)
+- - exporting actions from counterSlice.actions
+- - Async thunk defined outside of slice, (passedVal) => (dispatch, getState) => ...
+- - selector to grab piece of state
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/features/counter/counterSlice.js"
+import { createSlice } from "@reduxjs/toolkit";
+
+export const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      /* state.value += 1; */
+      return {
+        ...state,
+        value: state.value + 1,
+      };
+    },
+    decrement: (state) => {
+      /* state.value -= 1; */
+      return {
+        ...state,
+        value: state.value - 1,
+      };
+    },
+    incrementByAmount: (state, action) => {
+      state.value += action.payload;
+    },
+  },
+});
+
+export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+
+export const incrementAsync = (amount) => (dispatch) => {
+  setTimeout(() => {
+    dispatch(incrementByAmount(amount));
+  }, 1000);
+};
+
+export const selectCount = (state) => state.counter.value;
+
+export default counterSlice.reducer;
+```
+
+- Store configuration - adds reducer, imports a slice reducer
+- Familiar Provider, passing in store
+- Exploring the counterSlice:
+- - default export at bottom as counterSlice.reducer
+- - initial state defined in slice
+- - actions in reducers object, uses Immur (BEWARE)
+- - exporting actions from counterSlice.actions
+- - Async thunk defined outside of slice, (passedVal) => (dispatch, getState) => ...
+- - selector to grab piece of state
+- BEWARE of Immur - may want to maintain traditional Reaxt cloning syntax
+
+</CodeStep>
+
+<CodeStep>
+
+```js showNumbers title="./src/features/counter/Counter.js"
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  decrement,
+  increment,
+  incrementByAmount,
+  incrementAsync,
+  selectCount,
+} from "./counterSlice";
+
+export function Counter() {
+  const count = useSelector(selectCount);
+  const dispatch = useDispatch();
+  const [incrementAmount, setIncrementAmount] = useState("2");
+
+  return (
+    <div>
+        <button onClick={() => dispatch(increment())}>
+          +
+        </button>
+        <span>{count}</span>
+        <button onClick={() => dispatch(decrement())}>
+          -
+        </button>
+      </div>
+      <div>
+        <input
+          value={incrementAmount}
+          onChange={(e) => setIncrementAmount(e.target.value)}
+        />
+        <button
+          onClick={() =>
+            dispatch(incrementByAmount(Number(incrementAmount) || 0))
+          }
+        >
+          Add Amount
+        </button>
+        <button
+          onClick={() => dispatch(incrementAsync(Number(incrementAmount) || 0))}
+        >
+          Add Async
+        </button>
+    </div>
+  );
+}
+```
+
+- Store configuration - adds reducer, imports a slice reducer
+- Familiar Provider, passing in store
+- Exploring the counterSlice:
+- - default export at bottom as counterSlice.reducer
+- - initial state defined in slice
+- - actions in reducers object, uses Immur (BEWARE)
+- - exporting actions from counterSlice.actions
+- - Async thunk defined outside of slice, (passedVal) => (dispatch, getState) => ...
+- - selector to grab piece of state
+- BEWARE of Immur - may want to maintain traditional Reaxt cloning syntax
+- Using values from the store - Counter.js
+- - actions and selectors imported from slice
+- - grab store value with useSelector
+- - dispatch actions with useDispatch, imported from react-redux
+- - (clarification) has internal state for input el
+
+</CodeStep>
+
+</CodeSurferColumns>
+
+---
+
+# CRA Redux Template (Redux Toolkit) Sandbox
 
 <IframeLoader
-  src={"https://d6jtdo9jhz4ae.cloudfront.net/"}
-  title={"CCC Taft Guided Pathways"}
+  src={`https://codesandbox.io/embed/jolly-platform-yw3jj?codemirror=1&fontsize=14&hidenavigation=1&theme=dark`}
+  title={`CRA Redux Template Sandbox`}
 />
+
+---
+
+# Other Options for Global State: Easy Peasy, MobX, XState
+
+<div style={{display:'flex', width:'100%'}}>
+
+<div style={{ height: "100vh", flex: "1 1 33%" }}>
+  <IframeLoader src={`https://easy-peasy.now.sh/`} title={`Easy Peasy`} />
+</div>
+
+<div style={{ height: "100vh", flex: "1 1 33%" }}>
+  <IframeLoader src={`https://mobx.js.org/README.html`} title={`MOBX`} />
+</div>
+
+<div style={{ height: "100vh", flex: "1 1 33%" }}>
+  <IframeLoader
+    src={`https://xstate.js.org/docs/recipes/react.html`}
+    title={`XState`}
+  />
+</div>
+
+</div>
 
 ---
 
@@ -3787,7 +4537,7 @@ const LeftDrawer = ({}: ILeftDrawer) => {
         <span>.map, key</span>
       </div>
       <div className="box box-sandyBrown p-2 text-center">
-        <span>htmlFor</span>
+        <span>className vs. class, htmlFor vs. for</span>
       </div>
       <div className="box box-sandyBrown p-2 text-center">
         <span>props drilling</span>
@@ -3798,6 +4548,16 @@ const LeftDrawer = ({}: ILeftDrawer) => {
     </Steps>
   </BasicGrid>
 </MainContent>
+
+---
+
+# My Takeways
+
+- Be able to READ class components and traditional Redux
+- React Hooks for modern projects
+- Understand basic state management - stores, actions, dispatchers
+- Context for small to medium projects
+- Redux Toolkit or Easy Peasy for medium-large projects
 
 ---
 
