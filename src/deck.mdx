@@ -2812,14 +2812,17 @@ import React, { useState, useEffect } from 'react';
 const BookList = ({bookListType}) => {
   const [books, setBooks] = useState([]);
 
-  useEffect( async () => {
+  useEffect(() => {
     let timeoutHandle = window.setTimeout(() => {...});
 
-    try {
-      const booksRes = await fetch('...');
-      const books = await booksRes.json();
-      setBooks(books);
-    } catch(error) {}
+    const getData = async () => {
+      try {
+        const booksRes = await fetch('...');
+        const books = await booksRes.json();
+        setBooks(books);
+      } catch(error) {...}
+      }
+    getData();
 
     return () => {
       if (timeoutHandle) {
