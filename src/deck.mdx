@@ -120,7 +120,6 @@ import colors, { colorMap } from "./styles/colors";
 - TypeScript
 - Node
 - Webpack
-- Database
 
 </div>
 </div>
@@ -203,7 +202,7 @@ import colors, { colorMap } from "./styles/colors";
     <GridItem>Legacy Projects</GridItem>
     <GridItem>3rd Party Plugins</GridItem>
     <GridItem>Still Supported</GridItem>
-    <GridItem>React docs still largely use classes</GridItem>
+    <GridItem>React docs and tutorials still largely use classes</GridItem>
   </BasicGrid>
 </MainContent>
 
@@ -2322,7 +2321,7 @@ export default BookList;
 
 - useState, destructuring value and setter
 - define functions before return
-- !passingValue ? passInFn : (val) => myFn(val)
+- onMyFn={myFn} vs. onMyFn={(val) => myFn(val)}
 
 ---
 
@@ -2487,7 +2486,7 @@ const App = ({title}) => {
     return () => {
       // componentWillUnmount functions
     };
-  });
+  }, []);
 
   return (<>...</>);
 }
@@ -2692,6 +2691,7 @@ const App = () => {
   const [ books, setBooks ] = useState([]);
 
   useEffect(async () => {
+    // TODO rewrite
     try {
       const booksRes = await fetch('https://example.com/api/books');
       const books = await booksRes.json();
@@ -2811,9 +2811,10 @@ import React, { useState, useEffect } from 'react';
 
 const BookList = ({bookListType}) => {
   const [books, setBooks] = useState([]);
-  let timeoutHandle = window.setTimeout(() => {...});
 
   useEffect( async () => {
+    let timeoutHandle = window.setTimeout(() => {...});
+
     try {
       const booksRes = await fetch('...');
       const books = await booksRes.json();
@@ -4737,6 +4738,14 @@ body {
 
 ---
 
+# Suggested Free Youtube Channels
+
+- Traversy Media
+- The Net Ninja
+- Rowadz
+
+---
+
 # Activity - gather.town
 
 <Split>
@@ -4758,6 +4767,9 @@ body {
       target="_blank"
     >
       Gather.town ux-forum-react
+      <br />
+      <br />
+      https://gather.town/app/IxOEh5iBhXwxdTWg/ux-forum-react
     </a>
   </p>
   <p>Password: uxforumreact</p>
